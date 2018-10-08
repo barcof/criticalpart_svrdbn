@@ -17,8 +17,8 @@
     <link rel="stylesheet" type="text/css" href="asset/css/style.css"/>
     <link rel="stylesheet" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css"/> -->
 
-    <script src="../bootstrap/jquery/jquery-1.12.0.min.js"></script>
-    <script src="../bootstrap/js/bootstrap.min.js"></script>
+    <!-- <script src="../bootstrap/jquery/jquery-1.12.0.min.js"></script> -->
+    <!-- <script src="../bootstrap/js/bootstrap.min.js"></script> -->
     <!-- <script type="text/javascript">
       $(document).ready(function(){
         $("#menu-toggle").click(function(e) {
