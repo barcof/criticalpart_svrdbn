@@ -21,15 +21,15 @@
 	});
 	
 	var toolbar_detail = Ext.create('Ext.toolbar.Toolbar',{
-		dock: 'bottom',
+		dock: 'right',
 		ui: 'footer',
 		defaults: {
 			defaultType: 'button',
-			scale: 'large'
+			scale: 'small'
 		},
 		items: [{
 			name: 'update',
-			icon: 'resources/save.png',
+			icon: 'resources/save_s.png',
 			handler: function() {
 				var getForm = this.up('form').getForm();
 				if (getForm.isValid()) {
@@ -57,7 +57,7 @@
 			}
 		},{
 			name: 'delete',
-			icon: 'resources/delete.png',
+			icon: 'resources/delete_s.png',
 			handler: function() {
 				var rec = grid_exp.getSelectionModel().getSelection();
 				var len = rec.length;
@@ -97,7 +97,7 @@
 			}
 		},{
 			name: 'print',
-			icon: 'resources/print.png',
+			icon: 'resources/print_s.png',
 			handler	: function(widget, event) {
 				var rec = grid_exp.getSelectionModel().getSelection();
 				var len = rec.length;
@@ -159,7 +159,7 @@
 			}
 		}, {
 			name: 'reset',
-			icon: 'resources/reset.png',
+			icon: 'resources/reset_s.png',
 			handler: function() {
 				this.up('form').getForm().reset();
 				// Ext.ComponentQuery.query('textfield[name=nik]')[0].setEditable(true);
@@ -241,7 +241,7 @@
 		}, {
 			xtype: 'fieldset',
 			cls: 'customFieldSet',
-			title: '<span style="font-size:14px;color:#263238;letter-spacing:5px;font-weight:bold">CONDITION AFTER OPEN</span>',
+			title: '<span style="color:#263238;letter-spacing:5px;font-weight:bold">CONDITION AFTER OPEN</span>',
 			layout: { type: 'hbox', pack: 'center', align: 'stretch' },
 			items: [{
 				xtype: 'fieldcontainer',
@@ -321,7 +321,7 @@
 		}, {
 			xtype: 'fieldset',
 			cls: 'customFieldSet',
-			title: '<span style="font-size:14px;color:#263238;letter-spacing:5px;font-weight:bold">BAKING CONDITION</span>',
+			title: '<span style="color:#263238;letter-spacing:5px;font-weight:bold">BAKING CONDITION</span>',
 			layout: { type: 'hbox', pack: 'center', align: 'stretch' },
 			items: [{
 				xtype: 'fieldcontainer',
