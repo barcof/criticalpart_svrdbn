@@ -6,7 +6,18 @@
 	});
 
 	var store_detail = Ext.create('Ext.data.Store',{
-
+		model: 'detail_part',
+		autoLoad: true,
+		pageSize: 25,
+		proxy: {
+			type: 'ajax',
+			url: 'json/displayDetailPart.php',
+			reader: {
+				type: 'json',
+				rootProperty: 'data',
+				totalProperty: 'totalcount'
+			}
+		}
 	});
 	
 	var toolbar_detail = Ext.create('Ext.toolbar.Toolbar',{
@@ -375,6 +386,7 @@
 	});
 
 	var grid_detail = Ext.create('Ext.grid.Panel', {
+		store: store_detail,
 		selModel: Ext.create('Ext.selection.CheckboxModel'),
 	    viewConfig: {
 	    	enableTextSelection  : true
@@ -382,16 +394,33 @@
 	    width: 400,
 	    columns: [
 	    	{ header: 'NO', xtype: 'rownumberer', width: 55, sortable: false },
-	    	{ text: 'UNIQUE ID', dataIndex: '', hidden: true },
-	    	{ text: 'ID', dataIndex: '', hidden: true },
-	    	{ text: 'PART NUMBER', dataIndex: '', flex: 1 },
+	    	{ text: 'UNIQUE ID', dataIndex: 'unid', hidden: true },
+	    	{ text: 'ID', dataIndex: 'id', hidden: true },
+	    	{ text: 'PART NUMBER', dataIndex: 'partno', flex: 1 },
+	    	{ text: 'PROD. DATE', dataIndex: 'proddate', flex: 1 },
 	    	{ header: 'CONDITION AFTER OPEN', columns: [
-	    		{ text: 'LIFETIME', dataIndex: '', width: 400 }
-	    	]},
+	    		{ text: 'TEMPERATURE [°C]', columns:[
+		    		{ text: 'MIN', dataIndex: 'htempmin', width: 70 },
+		    		{ text: 'MAX', dataIndex: 'htempmax', width: 70 }
+	    		] },
+	    		{ text: 'HUMIDITY [%]', columns: [
+	    			{ text: 'MIN', dataIndex: 'humidmin', width: 70 },
+		    		{ text: 'MAX', dataIndex: 'humidmax', width: 70 }
+	    		] },
+	    		{ text: 'TIME LIMIT', dataIndex: 'lifetime', flex: 1 }
+	    	] },
 	    	{ header: 'BAKING CONDITION', columns:[
-		    	{ text: 'SCAN IN', dataIndex: '', flex: 1 },
-		    	{ text: 'SCAN OUT', dataIndex: '', flex: 1 }
-	    	]}
+		    	{ text: 'TEMPERATURE [°C]', columns:[
+		    		{ text: 'MIN', dataIndex: 'btempmin', width: 70 },
+		    		{ text: 'MAX', dataIndex: 'btempmax', width: 70 }
+	    		] },
+	    		{ text: 'BAKING PERIOD', columns: [
+	    			{ text: 'MIN', dataIndex: 'periodmin', width: 70 },
+		    		{ text: 'MAX', dataIndex: 'periodmax', width: 70 }
+	    		] }
+	    	] },
+	    	{ text: 'EXPIRED DATE', dataIndex: 'expdate', flex: 1 },
+	    	{ text: 'NIK', dataIndex: 'nik', flex: 1 }
 	    ]
 	});
 
