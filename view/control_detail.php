@@ -1,4 +1,13 @@
 <script type="text/javascript">
+
+	Ext.define('detail_part',{
+		extend: 'Ext.data.Model',
+		fields: ['unid','id','partno','proddate','htempmin','htempmax','humidmin','humidmax','lifetime','btempmin','btempmax','periodmin','periodmax','expdate','nik']
+	});
+
+	var store_detail = Ext.create('Ext.data.Store',{
+
+	});
 	
 	var toolbar_detail = Ext.create('Ext.toolbar.Toolbar',{
 		dock: 'bottom',

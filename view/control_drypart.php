@@ -220,6 +220,7 @@
 	    	{ text: 'UNIQUE ID', dataIndex: '', hidden: true },
 	    	{ text: 'ID', dataIndex: '', hidden: true },
 	    	{ text: 'PART NUMBER', dataIndex: 'part_no', flex: 1 },
+	    	{ text: 'OPEN DATE', dataIndex: '', flex: 1 },
 	    	{ text: 'SCAN IN', dataIndex: '', flex: 1 },
 	    	{ text: 'SCAN OUT', dataIndex: '', flex: 1 }
 	    ]
