@@ -10,9 +10,7 @@
   $lotno        = isset($_REQUEST['baking_lotno']) ? $_REQUEST['baking_lotno'] : " ";
   $temp         = isset($_REQUEST['baking_temp']) ? $_REQUEST['baking_temp'] : " ";
   $duration     = isset($_REQUEST['baking_duration']) ? $_REQUEST['baking_duration'] : " ";
-  $raw_nik_in   = isset($_REQUEST['baking_nik_in']) ? $_REQUEST['baking_nik_in'] : " ";
   $raw_nik_out  = isset($_REQUEST['baking_nik_out']) ? $_REQUEST['baking_nik_out'] : " ";
-  $nik_in       = substr($raw_nik_in,2,5);
   $nik_out      = substr($raw_nik_out,2,5);
   $raw_datein   = isset($_REQUEST['baking_date_in']) ? $_REQUEST['baking_date_in'] : NULL;
   $raw_timein   = isset($_REQUEST['baking_time_in']) ? $_REQUEST['baking_time_in'] : NULL;
@@ -25,6 +23,12 @@
   // echo 'Date IN = '.$raw_datein.' '.$raw_timein;
   // echo '<br>';
   // echo 'Date OUT = '.$raw_dateout.' '.$raw_timeout;
+
+  if (strlen($raw_nik_out) == 5) {
+    $nik_out = $raw_nik_out;
+  } else {
+    $nik_out = substr($raw_nik_out,2,5);
+  };
   
   try {
     $sql = $conn->Execute(" EXEC updateBakingData '{$unid}','{$partno}','{$model}','{$process}',{$qty},'{$lotno}',
