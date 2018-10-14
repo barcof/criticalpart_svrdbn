@@ -32,7 +32,7 @@
   
   try {
     $sql = $conn->Execute(" EXEC updateBakingData '{$unid}','{$partno}','{$model}','{$process}',{$qty},'{$lotno}',
-                                                  '{$temp}','{$duration}','{$nik_in}','{$nik_out}',
+                                                  '{$temp}','{$duration}','{$nik_out}',
                                                   '{$date_in}','{$date_out}','{$remark}' ");
     $sql->Close();
 
