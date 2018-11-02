@@ -17,10 +17,27 @@
     $getfloorlife = $chkexp->fields[1];
     $chkexp->Close();
 
+    // echo $getselflife;
+    // echo '||';
+    // echo $getdate;
+    // echo '||';
+    // echo $getfloorlife;
+    // echo '||';
+     $var_msg = "";
+
     if ($getdate > $getselflife) {
+      // MESSAGE FOR BAKING
       $var_msg = 2;
     } else {
-      if ($getdate > $getfloorlife) {
+      // if ($getfloorlife == '') {
+      //   $sql = $conn->Execute(" EXEC insertDryPart '{$drypartno}','{$nik}' ");
+      //   $sql->Close();
+
+      //   $var_msg = 1;
+      // }
+      // else 
+      if (($getdate > $getfloorlife) && $getfloorlife != ''){
+        // MESSAGE FOR BAKING
         $var_msg = 2;
       } else {
         $sql = $conn->Execute(" EXEC insertDryPart '{$drypartno}','{$nik}' ");
