@@ -49,6 +49,7 @@
     .customLabel label {
       text-align: center;
       font-weight: bold;
+      font-size: 12px;
     }
     /*[class*=x-form-text] {
       font-family: 'Roboto Condensed', sans-serif;

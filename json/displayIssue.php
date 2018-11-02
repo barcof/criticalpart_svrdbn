@@ -14,7 +14,7 @@
 
 	for($i = 0;!$sql->EOF;$i++) {
 		$return[$i]['unid'] = $sql->fields['0'];
-		$return[$i]['id'] = $sql->fields['1'];
+		$return[$i]['issueid'] = $sql->fields['1'];
 		$return[$i]['expid'] = $sql->fields['2'];
 		$return[$i]['part_no'] = $sql->fields['3'];
 		$return[$i]['part_name'] = $sql->fields['4'];

@@ -2,13 +2,13 @@
 
 	Ext.define('detail_part',{
 		extend: 'Ext.data.Model',
-		fields: ['unid','id','partno','proddate','htempmin','htempmax','humidmin','humidmax','lifetime','btempmin','btempmax','periodmin','periodmax','expdate','nik']
+		fields: ['unid','id','partno','htempmin','htempmax','humidmin','humidmax','lifetime','btempmin','btempmax','periodmin','periodmax','nik']
 	});
 
 	var store_detail = Ext.create('Ext.data.Store',{
 		model: 'detail_part',
 		autoLoad: true,
-		pageSize: 25,
+		pageSize: 5,
 		proxy: {
 			type: 'ajax',
 			url: 'json/displayDetailPart.php',
@@ -29,6 +29,7 @@
 		},
 		items: [{
 			name: 'update',
+			text: 'UPDATE',
 			icon: 'resources/save_s.png',
 			handler: function() {
 				var getForm = this.up('form').getForm();
@@ -57,6 +58,7 @@
 			}
 		},{
 			name: 'delete',
+			text: 'DELETE',
 			icon: 'resources/delete_s.png',
 			handler: function() {
 				var rec = grid_exp.getSelectionModel().getSelection();
@@ -95,48 +97,18 @@
 					});
 				}
 			}
-		},{
-			name: 'print',
-			icon: 'resources/print_s.png',
-			handler	: function(widget, event) {
-				var rec = grid_exp.getSelectionModel().getSelection();
-				var len = rec.length;
-				
-				if(len == "") {
-					Ext.Msg.show({
-						title		:'Message',
-						icon		: Ext.Msg.ERROR,
-						msg			: "No data selected.",
-						buttons		: Ext.Msg.OK
-					});
-				} else {
-					//	get selected data
-					var i = 0; // initial variable for looping
-					var a = ''; // empty string 
-					var b = ''; // empty string
-					var total = 0;
-					
-					for (var i=0; i < len; i++) {
-						cb 	= a + '' + rec[i].data.id;
-						a 	= a + '' + rec[i].data.id + '/';
-						
-						lbl = b + '' + rec[i].data.id;
-						b 	= b + '' + rec[i].data.id + ', ';
-						
-						total++;
-					}
-					window.open ("response/printExp_sato.php?total="+total+"&cb="+cb+"");
-				}
-			}
-		},'->',{
+		},
+		'->',
+		{
 			name: 'create',
+			text: 'INPUT',
 			icon: 'resources/create.png',
 			formBind: true,
 			handler: function() {
 				var getForm = this.up('form').getForm();
 				if (getForm.isValid()) {
 					getForm.submit({
-						url: 'response/inputExp.php',
+						url: 'response/inputDetail.php',
 						waitMsg : 'Now transfering data, please wait..',
 						success : function(form, action) {
 	                        Ext.Msg.show({
@@ -144,7 +116,7 @@
 	                        	msg     : action.result.msg,
 	                        	buttons : Ext.Msg.OK
 	                        });
-	                        exp_control.loadPage(1);
+	                        store_detail.loadPage(1);
 	                     },
 	                    failure : function(form, action) {
 	                        Ext.Msg.show({
@@ -159,6 +131,7 @@
 			}
 		}, {
 			name: 'reset',
+			text: 'RESET',
 			icon: 'resources/reset_s.png',
 			handler: function() {
 				this.up('form').getForm().reset();
@@ -169,37 +142,29 @@
 	});
 
 	var form_detail = Ext.create('Ext.form.Panel',{
-		// title: 'FORM SETTING PARTS',
-		// header: { titleAlign: 'center' },
 		name: 'form_detail',
 		layout: 'anchor',
-		// width: 600,
 		bodyStyle: {
 			background: 'rgba(255, 255, 255, 0)'
 		},
-		// defaults: {
-		//     anchor: '100%',
-		//     labelWidth: 150,
-		//     padding: '0 0 5 0',
-		//     fieldStyle: 'text-align:center;'
-		// },
-		// defaultType: 'textfield',
+		// width: '50%',
 		items: [{
 			xtype: 'container',
-			title: 'Header',
 			name: 'cont-top',
 			layout: { type: 'hbox', pack: 'center', align: 'stretch' },
 			defaults: {
-			    anchor: '100%',
-			    labelWidth: 150,
+			    width: 275,
 			    padding: '0 5 5 5',
 			    fieldStyle: 'text-align:center;'
 			},
 			defaultType: 'textfield',
 			items: [{
+				xtype: 'hiddenfield',
+				name: 'detunid'
+			}, {
 				emptyText: 'SCAN NIK',
-				name: 'detnik',
-				value: '37297',
+				name: 'detnik',  // NIK
+				// value: '37297',
 				selectOnFocus: true,
 				allowBlank: false,
 				listeners: {
@@ -209,50 +174,48 @@
 							var txtval = field.value;
 							var len = txtval.length;
 							if (len != 0) {
-								Ext.ComponentQuery.query('textfield[name=drypartno]')[0].setDisabled(false);
+								Ext.ComponentQuery.query('textfield[name=detpart]')[0].setDisabled(false);
 							} else {
 
 							}
-							// Ext.ComponentQuery.query('textfield[name=drypartno]')[0].focus(true,1);
+							Ext.ComponentQuery.query('textfield[name=detpart]')[0].focus(true,1);
 						}
 			        },
 			        change: function(field) {
 						var txtval = field.value;
 						var len = txtval.length;
 						if (len == 0) {
-							Ext.ComponentQuery.query('textfield[name=drypartno]')[0].setDisabled(true);
+							Ext.ComponentQuery.query('textfield[name=detpart]')[0].setDisabled(true);
 						}
 					}
 				}
 			}, {
 				emptyText: 'PART NUMBER',
-				name: 'detpart',
-				width: 250,
-				allowBlank: false
+				name: 'detpart', // PART NUMBER
+				allowBlank: false,
+				disabled: true,
+				listeners: {
+		        	change:function(field){
+		                field.setValue(field.getValue().toUpperCase());
+		            }
+		        }
 
-			}, {
-				xtype: 'datefield',
-				name: 'detproddate',
-				editable: false,
-				emptyText: 'PRODUCTION DATE',
-				format: 'Y-m-d',
-			    allowBlank: false
-			}]
+			}
+			]
 		}, {
 			xtype: 'fieldset',
 			cls: 'customFieldSet',
 			title: '<span style="color:#263238;letter-spacing:5px;font-weight:bold">CONDITION AFTER OPEN</span>',
 			layout: { type: 'hbox', pack: 'center', align: 'stretch' },
+			height: 75,
 			items: [{
 				xtype: 'fieldcontainer',
 				cls: 'customLabel',
 				fieldLabel: 'TEMPERATURE [ °C ]',
 				labelAlign: 'top',
 				labelStyle: 'color:#263238;letter-spacing:1px',
-				// width: 150,
 				layout: { type: 'hbox', pack: 'center', align: 'stretch' },
 				defaults: {
-				    padding: '0 0 5 0',
 				    fieldStyle: 'text-align:center;',
 				    hideTrigger: true,
 			        keyNavEnabled: false,
@@ -262,13 +225,17 @@
 				},
 				defaultType: 'numberfield',
 				items: [{
-					emptyText: 'MIN'
+					emptyText: 'MIN',
+					name: 'htempmin', // HUMIDITY TEMPERATURE MIN VALUE
+					allowBlank: false
 				}, {
 					xtype: 'label',
 					text: '_',
 					width: 10
 				}, {
-					emptyText: 'MAX'
+					emptyText: 'MAX',
+					name: 'htempmax', // HUMIDITY TEMPERATURE MAX VALUE
+					allowBlank: false
 				}]
 			}, {xtype:'tbspacer',width:20},
 			{
@@ -279,7 +246,6 @@
 				labelStyle: 'color:#263238;letter-spacing:1px',
 				layout: { type: 'hbox', pack: 'center', align: 'stretch' },
 				defaults: {
-				    padding: '0 0 5 0',
 				    fieldStyle: 'text-align:center;',
 				    hideTrigger: true,
 			        keyNavEnabled: false,
@@ -289,13 +255,17 @@
 				},
 				defaultType: 'numberfield',
 				items: [{
-					emptyText: 'MIN'
+					emptyText: 'MIN',
+					name: 'humidmin', // HUMIDITY MIN VALUE
+					allowBlank: false
 				}, {
 					xtype: 'label',
 					text: '_',
 					width: 10
 				}, {
-					emptyText: 'MAX'
+					emptyText: 'MAX',
+					name: 'humidmax', // HUMIDITY MAX VALUE
+					allowBlank: false
 				}]
 			}, {xtype:'tbspacer',width:20},
 			{
@@ -306,7 +276,6 @@
 				labelStyle: 'color:#263238;letter-spacing:1px',
 				layout: { type: 'hbox', pack: 'center', align: 'stretch' },
 				defaults: {
-				    padding: '0 0 5 0',
 				    fieldStyle: 'text-align:center;',
 				    hideTrigger: true,
 			        keyNavEnabled: false,
@@ -315,7 +284,9 @@
 				},
 				defaultType: 'numberfield',
 				items: [{
-					emptyText: 'FLOOR LIFE'
+					emptyText: 'FLOOR LIFE',
+					name: 'lifetime', // FLOOR LIFE
+					allowBlank: false
 				}]
 			}]
 		}, {
@@ -323,17 +294,15 @@
 			cls: 'customFieldSet',
 			title: '<span style="color:#263238;letter-spacing:5px;font-weight:bold">BAKING CONDITION</span>',
 			layout: { type: 'hbox', pack: 'center', align: 'stretch' },
+			height: 75,
 			items: [{
 				xtype: 'fieldcontainer',
 				cls: 'customLabel',
 				fieldLabel: 'TEMPERATURE [ °C ]',
 				labelAlign: 'top',
 				labelStyle: 'color:#263238;letter-spacing:1px',
-				// width: 150,
 				layout: { type: 'hbox', pack: 'center', align: 'stretch' },
 				defaults: {
-				    anchor: '100%',
-				    padding: '0 0 5 0',
 				    fieldStyle: 'text-align:center;',
 				    hideTrigger: true,
 			        keyNavEnabled: false,
@@ -343,13 +312,17 @@
 				},
 				defaultType: 'numberfield',
 				items: [{
-					emptyText: 'MIN'
+					emptyText: 'MIN',
+					name: 'btempmin', // BAKING TEMPERATURE MIN
+					allowBlank: false
 				}, {
 					xtype: 'label',
 					text: '_',
 					width: 10
 				}, {
-					emptyText: 'MAX'
+					emptyText: 'MAX',
+					name: 'btempmax', // BAKING TEMPERATURE MAX
+					allowBlank: false
 				}]
 			}, {xtype:'tbspacer',width:20}, 
 			{
@@ -358,27 +331,27 @@
 				fieldLabel: 'PERIOD [ HOUR ]',
 				labelAlign: 'top',
 				labelStyle: 'color:#263238;letter-spacing:1px',
-				// width: 150,
 				layout: { type: 'hbox', pack: 'center', align: 'stretch' },
 				defaults: {
-				    anchor: '100%',
-				    padding: '0 0 5 0',
 				    fieldStyle: 'text-align:center;',
 				    hideTrigger: true,
 			        keyNavEnabled: false,
 			        mouseWheelEnabled: false,
-				    minValue: 0,
-				    // width: 100
+				    minValue: 0
 				},
 				defaultType: 'numberfield',
 				items: [{
-					emptyText: 'MIN'
+					emptyText: 'MIN',
+					name: 'periodmin', // BAKING PERIOD MIN
+					allowBlank: false
 				}, {
 					xtype: 'label',
 					text: '_',
 					width: 10
 				}, {
-					emptyText: 'MAX'
+					emptyText: 'MAX',
+					name: 'periodmax', // BAKING PERIOD MAX
+					allowBlank: false
 				}]
 			}]
 		}],
@@ -395,9 +368,9 @@
 	    columns: [
 	    	{ header: 'NO', xtype: 'rownumberer', width: 55, sortable: false },
 	    	{ text: 'UNIQUE ID', dataIndex: 'unid', hidden: true },
-	    	{ text: 'ID', dataIndex: 'id', hidden: true },
+	    	{ text: 'ID', dataIndex: 'id', flex: 1 },
 	    	{ text: 'PART NUMBER', dataIndex: 'partno', flex: 1 },
-	    	{ text: 'PROD. DATE', dataIndex: 'proddate', flex: 1 },
+	    	// { text: 'PROD. DATE', dataIndex: 'proddate', flex: 1 },
 	    	{ header: 'CONDITION AFTER OPEN', columns: [
 	    		{ text: 'TEMPERATURE [°C]', columns:[
 		    		{ text: 'MIN', dataIndex: 'htempmin', width: 70 },
@@ -419,9 +392,33 @@
 		    		{ text: 'MAX', dataIndex: 'periodmax', width: 70 }
 	    		] }
 	    	] },
-	    	{ text: 'EXPIRED DATE', dataIndex: 'expdate', flex: 1 },
+	    	// { text: 'EXPIRED DATE', dataIndex: 'expdate', flex: 1 },
 	    	{ text: 'NIK', dataIndex: 'nik', flex: 1 }
-	    ]
+	    ],
+	    bbar: {
+	    	xtype: 'pagingtoolbar',
+	    	displayInfo	: true,
+	    	store: store_detail,
+	    	items: ['->',{
+	    		xtype: 'textfield',
+	    		name: 'fldsrc',
+	    		width: 600,
+	    		emptyText: 'Search part number in here...',
+	    		fieldStyle: 'text-align:center;',
+	    		listeners: {
+	    			specialkey: function(field, e) {
+						if (e.getKey() == e.ENTER) {
+							exp_control.proxy.setExtraParam('fldsrc',field.getValue());
+							exp_control.loadPage(1);
+							// console.log(field.value);
+						}
+	                },
+	                change:function(field){
+		                field.setValue(field.getValue().toUpperCase());
+		            }
+	    		}
+	    	}]
+	    }
 	});
 
 	var panel_detail = Ext.create('Ext.panel.Panel',{

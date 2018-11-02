@@ -15,6 +15,27 @@
 		Ext.QuickTips.init();
 
 		var required = '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>';
+		var expiredstatus = function(val) {
+			// Harus di maintain karna status EXPIRED di hardcode
+			var today = new Date();
+			var dd = today.getDate();
+			var mm = today.getMonth()+1; //January is 0!
+			var yyyy = today.getFullYear();
+
+			if(dd<10) { dd = '0'+dd } 
+
+			if(mm<10) { mm = '0'+mm } 
+
+			today = yyyy + '-' + mm + '-' + dd;
+
+			if (mm == val.substr(5,2)-1) {
+				return ("<span style=color:#ff6f00;><b>"+val+"</b><br>( WILL BE EXPIRED SOON )</span>");
+			} else { return (val); }
+
+			if (today > val) {
+				return ("<span style=color:red;>"+val+" ( EXPIRED PART )</span>");
+			} else { return (val); }
+		}
 
 		Ext.define('exp_control',{
 			extend: 'Ext.data.Model',
@@ -30,8 +51,6 @@
 			extend: 'Ext.data.Model',
 			fields: ['partno','parname','stdpack']
 		});
-
-
 
 		var exp_control = Ext.create('Ext.data.Store', {
 			model: 'exp_control',
@@ -398,31 +417,7 @@
 		        { text: 'EXPIRED DATE',
 		          dataIndex: 'exp_date',
 		          flex: 1,
-		          renderer: function(val) {
-		          	// Harus di maintain karna status EXPIRED di hardcode
-		          	var today = new Date();
-					var dd = today.getDate();
-					var mm = today.getMonth()+1; //January is 0!
-					var yyyy = today.getFullYear();
-
-					if(dd<10) {
-						dd = '0'+dd
-					} 
-
-					if(mm<10) {
-					    mm = '0'+mm
-					} 
-
-					today = yyyy + '-' + mm + '-' + dd;
-
-					if (today > val) {
-						return ("<span style=color:red;>"+val+" ( EXPIRED PART )</span>");
-					} else {
-						return (val);
-					}
-		          	// return val;
-		          	// console.log(today);
-		          }
+		          renderer: expiredstatus
 		    	},
 		    	{ text: 'EXP. AFTER OPEN', dataIndex: 'exp_after', hidden: true},
 		        { text: 'INPUT BY', dataIndex: 'nik',flex: 1 }

@@ -1,17 +1,38 @@
 <?php 
 	include_once 'control_drpbaking.php';
 	include_once 'control_detail.php';
+	include_once 'control_setpart.php';
 ?>
 <script type="text/javascript">
+	Ext.define('drypart',{
+		extend: 'Ext.data.Model',
+		fields: ['unid','id','partno','opendate','scanin','scanout','nik']
+	});
+
+	var drypart = Ext.create('Ext.data.Store',{
+		model: 'drypart',
+		autoLoad: true,
+		pageSize: 25,
+		proxy: {
+			type: 'ajax',
+			url: 'json/displayDryPart.php',
+			reader: {
+				type: 'json',
+				rootProperty: 'data',
+				totalProperty: 'totalcount'
+			}
+		}
+	});
 	
 	var toolbar_drypart = Ext.create('Ext.toolbar.Toolbar',{
 		dock:'bottom',
 		ui: 'footer',
 		defaults: {
 			defaultType: 'button',
-			scale: 'large'
+			scale: 'medium'
 		},
-		items: [{
+		items: [
+		/*{
 			name: 'update',
 			icon: 'resources/save.png',
 			handler: function() {
@@ -79,69 +100,39 @@
 					});
 				}
 			}
-		},{
-			name: 'print',
-			icon: 'resources/print.png',
-			handler	: function(widget, event) {
-				var rec = grid_exp.getSelectionModel().getSelection();
-				var len = rec.length;
-				
-				if(len == "") {
-					Ext.Msg.show({
-						title		:'Message',
-						icon		: Ext.Msg.ERROR,
-						msg			: "No data selected.",
-						buttons		: Ext.Msg.OK
-					});
-				} else {
-					//	get selected data
-					var i = 0; // initial variable for looping
-					var a = ''; // empty string 
-					var b = ''; // empty string
-					var total = 0;
-					
-					for (var i=0; i < len; i++) {
-						cb 	= a + '' + rec[i].data.id;
-						a 	= a + '' + rec[i].data.id + '/';
-						
-						lbl = b + '' + rec[i].data.id;
-						b 	= b + '' + rec[i].data.id + ', ';
-						
-						total++;
-					}
-					window.open ("response/printExp_sato.php?total="+total+"&cb="+cb+"");
-				}
-			}
-		},'->',{
-			name: 'create',
-			icon: 'resources/create.png',
-			formBind: true,
-			handler: function() {
-				var getForm = this.up('form').getForm();
-				if (getForm.isValid()) {
-					getForm.submit({
-						url: 'response/inputExp.php',
-						waitMsg : 'Now transfering data, please wait..',
-						success : function(form, action) {
-	                        Ext.Msg.show({
-	                        	title   : 'SUCCESS',
-	                        	msg     : action.result.msg,
-	                        	buttons : Ext.Msg.OK
-	                        });
-	                        exp_control.loadPage(1);
-	                     },
-	                    failure : function(form, action) {
-	                        Ext.Msg.show({
-		                        title   : 'OOPS, AN ERROR JUST HAPPEN !',
-		                        icons   : Ext.Msg.ERROR,
-		                        msg     : action.result.msg,
-		                        buttons : Ext.Msg.OK
-	                        });
-	                      }
-					});
-				}
-			}
-		}, {
+		},*/
+		'->',
+		// {
+		// 	name: 'create',
+		// 	icon: 'resources/create.png',
+		// 	formBind: true,
+		// 	handler: function() {
+		// 		var getForm = this.up('form').getForm();
+		// 		if (getForm.isValid()) {
+		// 			getForm.submit({
+		// 				url: 'response/inputExp.php',
+		// 				waitMsg : 'Now transfering data, please wait..',
+		// 				success : function(form, action) {
+	 //                        Ext.Msg.show({
+	 //                        	title   : 'SUCCESS',
+	 //                        	msg     : action.result.msg,
+	 //                        	buttons : Ext.Msg.OK
+	 //                        });
+	 //                        exp_control.loadPage(1);
+	 //                     },
+	 //                    failure : function(form, action) {
+	 //                        Ext.Msg.show({
+		//                         title   : 'OOPS, AN ERROR JUST HAPPEN !',
+		//                         icons   : Ext.Msg.ERROR,
+		//                         msg     : action.result.msg,
+		//                         buttons : Ext.Msg.OK
+	 //                        });
+	 //                      }
+		// 			});
+		// 		}
+		// 	}
+		// }, 
+		{
 			name: 'reset',
 			icon: 'resources/reset.png',
 			handler: function() {
@@ -157,13 +148,10 @@
 		// header: { titleAlign: 'center' },
 		name: 'form_drypart',
 		layout: 'anchor',
+		width: 500,
 		bodyStyle: {
         	background: 'rgba(255, 255, 255, 0)'
         },
-		width: 400,
-		bodyStyle: {
-			background: 'rgba(255, 255, 255, 0)'
-		},
 		defaults: {
 		    anchor: '100%',
 		    labelWidth: 150,
@@ -174,7 +162,7 @@
 		items: [{
 			emptyText: 'SCAN NIK',
 			name: 'drynik',
-			value: '37297',
+			// value: '37297',
 			selectOnFocus: true,
 			listeners: {
 				afterrender: function(field) { field.focus(true,500); },
@@ -201,15 +189,84 @@
 		}, {
 			emptyText: 'SCAN PART NUMBER',
 			name: 'drypartno',
-			disabled: true
+			disabled: true,
+			listeners: {
+				specialkey: function(field, e) {
+					if (e.getKey() == e.ENTER) {
+						var form = this.up('form').getForm();
+						if(form.isValid()) {
+							form.submit({
+								url: 'response/inputDryPart.php',
+								waitMsg : 'Now transfering data, please wait..',
+								success : function(form, action) {
+									// Ext.Msg.alert('Success', action.result.msg);
+									// console.log(action);
+			                        // Ext.Msg.show({
+			                        // 	title   : 'SUCCESS',
+			                        // 	msg     : action.result.msg,
+			                        // 	buttons : Ext.Msg.OK
+			                        // });
+			                        Ext.toast({
+									     html: 'Data Saved',
+									     title: 'SUCCESS - INOFRMATION',
+									     width: 200,
+									     align: 't'
+									 });
+			                        drypart.loadPage(1);
+			                        field.reset();
+			                    },
+			                    failure : function(form, action) {
+			                    	// Ext.Msg.alert('Failed', action.result.msg);
+			                    	// console.log(action.result);
+			                        Ext.Msg.show({
+				                        title   : 'OOPS, AN ERROR JUST HAPPEN !',
+				                        icons   : Ext.Msg.ERROR,
+				                        msg     : action.result.msg,
+				                        buttons : Ext.Msg.OK
+			                        });
+			                    }
+							});
+						}
+					}
+		        }
+			}
 		}, {
 			emptyText: 'CHECK LIFETIME PART',
-			name: 'drycheck'
+			name: 'drycheck',
+			listeners: {
+				specialkey: function(field, e) {
+					if (e.getKey() == e.ENTER) {
+						var form = this.up('form').getForm();
+						if (form.isValid()) {
+							form.submit({
+								url: 'response/checkLifetime.php',
+								waitMsg: 'Checking the data, please wait...',
+								success: function(form, action) {
+									Ext.Msg.show({
+										title 	: 'SUCCESS - INOFRMATION',
+										msg 	: action.result.msg,
+										buttons : Ext.Msg.OK
+									});
+								},
+								failure: function(form, action) {
+									Ext.Msg.show({
+				                        title   : 'OOPS, AN ERROR JUST HAPPEN !',
+				                        icon    : Ext.Msg.ERROR,
+				                        msg     : action.result.msg,
+				                        buttons : Ext.Msg.OK
+			                        });
+								}
+							});
+						}
+					}
+				}
+			}
 		}],
 		dockedItems: [toolbar_drypart]
 	});
 
 	var grid_drypart = Ext.create('Ext.grid.Panel', {
+		store: drypart,
 		selModel: Ext.create('Ext.selection.CheckboxModel'),
 	    viewConfig: {
 	    	enableTextSelection  : true
@@ -217,13 +274,35 @@
 	    width: 400,
 	    columns: [
 	    	{ header: 'NO', xtype: 'rownumberer', width: 55, sortable: false },
-	    	{ text: 'UNIQUE ID', dataIndex: '', hidden: true },
-	    	{ text: 'ID', dataIndex: '', hidden: true },
-	    	{ text: 'PART NUMBER', dataIndex: 'part_no', flex: 1 },
-	    	{ text: 'OPEN DATE', dataIndex: '', flex: 1 },
-	    	{ text: 'SCAN IN', dataIndex: '', flex: 1 },
-	    	{ text: 'SCAN OUT', dataIndex: '', flex: 1 }
-	    ]
+	    	{ text: 'UNIQUE ID', dataIndex: 'unid', hidden: true },
+	    	{ text: 'ID', dataIndex: 'id', hidden: true },
+	    	{ text: 'PART NUMBER', dataIndex: 'partno', flex: 1 },
+	    	{ text: 'OPEN DATE', dataIndex: 'opendate', flex: 1 },
+	    	{ text: 'SCAN IN', dataIndex: 'scanin', flex: 1 },
+	    	{ text: 'SCAN OUT', dataIndex: 'scanout', flex: 1 },
+	    	{ text: 'NIK', dataIndex: 'nik', flex: 1 }
+	    ],
+	    bbar: {
+	    	xtype: 'pagingtoolbar',
+	    	displayInfo	: true,
+	    	store: drypart,
+	    	items: ['->',{
+	    		xtype: 'textfield',
+	    		name: 'dryfldsrc',
+	    		width: 600,
+	    		emptyText: 'Search part number in here...',
+	    		fieldStyle: 'text-align:center;',
+	    		listeners: {
+	    			specialkey: function(field, e) {
+						if (e.getKey() == e.ENTER) {
+							drypart.proxy.setExtraParam('dryfldsrc',field.getValue());
+							drypart.loadPage(1);
+							// console.log(field.value);
+						}
+	                }
+	    		}
+	    	}]
+	    }
 	});
 
 	var panel_drypart = Ext.create('Ext.panel.Panel',{
@@ -242,7 +321,7 @@
 	        bodyPadding: 10,
 	        bodyStyle: {
 	        	// background: '#ADD2ED',
-	        	background: 'url("resources/bg-image-2.jpg") no-repeat center bottom',
+	        	background: 'url("resources/bg-image-2.jpg") no-repeat center',
 	        	backgroundSize: 'cover'
 	        },
 	        items: form_drypart
@@ -269,9 +348,13 @@
 			bodyStyle: 'background: #ADD2ED',
 		},
 		items: [{
-			title: 'SETTING PARTS',
+			title: 'PART MASTER',
 			layout: 'fit',
 			items: panel_detail
+		}, {
+			title: 'SETTING PART',
+			layout: 'fit',
+			items: panel_openpart
 		}, {
 			title: 'CONTROL EXPIRED PART',
 			layout: 'fit',

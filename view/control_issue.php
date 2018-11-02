@@ -4,7 +4,7 @@
 
 	Ext.define('issue_control',{
 		extend: 'Ext.data.Model',
-	    fields: ['unid','id','expid','part_no','part_name','model','qty','lotsize','lotno','nik','remark','prod_date','exp_date']
+	    fields: ['unid','issueid','expid','part_no','part_name','model','qty','lotsize','lotno','nik','remark','prod_date','exp_date']
 	});
 
 	Ext.define('get_partno',{
@@ -399,7 +399,7 @@
 	    columns: [
 	    	{ header: 'NO', xtype: 'rownumberer', width: 55, sortable: false },
 	    	{ text: 'UNIQUE ID', dataIndex: 'unid', hidden: true },
-	    	{ text: 'ID', dataIndex: 'id', hidden: true },
+	    	{ text: 'ID', dataIndex: 'issueid', hidden: true },
 	    	{ text: 'EXP. ID', dataIndex: 'expid', hidden: true },
 	        { text: 'PART NUMBER', dataIndex: 'part_no', flex: 1 },
 	        { text: 'PART NAME', dataIndex: 'part_name', flex: 1 },
