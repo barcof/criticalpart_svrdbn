@@ -409,8 +409,7 @@
 	    	{ text: 'PART NUMBER', dataIndex: 'partno', flex: 1 },
 	    	{ text: 'QTY', dataIndex: 'qty', flex: 1 },
 	    	{ text: 'PRODUCTION DATE', dataIndex: 'proddate', flex: 1 },
-	    	{ text: '(SELF LIFE)<br>EXPIRED DATE', dataIndex: 'selflife', flex: 1
-	    	},
+	    	{ text: '(SELF LIFE)<br>EXPIRED DATE', dataIndex: 'selflife', flex: 1, renderer: expstatus},
 	    	{ text: 'OPEN DATE', dataIndex: 'opendate', flex: 1 },
 	    	{ text: '(FLOOR LIFE)<br>EXPIRED DATE', dataIndex: 'floorlife', flex: 1, renderer: expstatus },
 	    	{ text: 'NIK', dataIndex: 'nik', flex: 1 }

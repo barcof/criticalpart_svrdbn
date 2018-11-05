@@ -17,7 +17,11 @@
     $chklifetime->Close();
 
     // check expired status
-    if ($expstatus > 0) { $var_msg = 2; } else { $var_msg = 1; }
+    if ($expstatus > 0) { 
+      $var_msg = 2; 
+    } else { 
+      $var_msg = 1; 
+    }
 
   }
 
