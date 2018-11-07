@@ -28,29 +28,29 @@
       });
     </script> -->
     <style type="text/css">
-    @font-face {
-      font-family: 'Roboto Condensed';
-      font-style: normal;
-      font-weight: 400;
-      src: url('../../font/RobotoCondensed-Regular.ttf');
-    }
+      @font-face {
+        font-family: 'Roboto Condensed';
+        font-style: normal;
+        font-weight: 400;
+        src: url('../../font/RobotoCondensed-Regular.ttf');
+      }
 
-    * {
-      font-family: 'Roboto Condensed', sans-serif;
-      text-decoration: none !important;
-      outline: 0 !important;
-    }
-    .customFieldSet {
-      border: 1px solid black;
-    }
-    .customFieldSet legend {
-      text-align: center;
-    }
-    .customLabel label {
-      text-align: center;
-      font-weight: bold;
-      font-size: 12px;
-    }
+      * {
+        font-family: 'Roboto Condensed', sans-serif;
+        text-decoration: none !important;
+        outline: 0 !important;
+      }
+      .customFieldSet {
+        border: 1px solid black;
+      }
+      .customFieldSet legend {
+        text-align: center;
+      }
+      .customLabel label {
+        text-align: center;
+        font-weight: bold;
+        font-size: 12px;
+      }
     /*[class*=x-form-text] {
       font-family: 'Roboto Condensed', sans-serif;
     }*/

@@ -6,7 +6,7 @@
 <script type="text/javascript">
 	Ext.define('drypart',{
 		extend: 'Ext.data.Model',
-		fields: ['unid','id','partno','opendate','scanin','scanout','nik']
+		fields: ['unid','id','partno','opendate','scanin','scanout','nikopen','nikin','nikout']
 	});
 
 	var drypart = Ext.create('Ext.data.Store',{
@@ -168,7 +168,7 @@
 				afterrender: function(field) { field.focus(true,500); },
 		        specialkey: function(field, e) {
 					if (e.getKey() == e.ENTER) {
-						var txtval = field.value;
+						var txtval = field.getValue();
 						var len = txtval.length;
 						if (len != 0) {
 							Ext.ComponentQuery.query('textfield[name=drypartno]')[0].setDisabled(false);
@@ -179,7 +179,7 @@
 					}
 		        },
 		        change: function(field) {
-					var txtval = field.value;
+					var txtval = field.getValue();
 					var len = txtval.length;
 					if (len == 0) {
 						Ext.ComponentQuery.query('textfield[name=drypartno]')[0].setDisabled(true);
@@ -280,7 +280,9 @@
 	    	{ text: 'OPEN DATE', dataIndex: 'opendate', flex: 1 },
 	    	{ text: 'SCAN IN', dataIndex: 'scanin', flex: 1 },
 	    	{ text: 'SCAN OUT', dataIndex: 'scanout', flex: 1 },
-	    	{ text: 'NIK', dataIndex: 'nik', flex: 1 }
+	    	{ text: 'PIC OPEN', dataIndex: 'nikopen', flex: 1 },
+	    	{ text: 'PIC SCAN IN', dataIndex: 'nikin', flex: 1, hidden: true },
+	    	{ text: 'PIC SCAN OUT', dataIndex: 'nikout', flex: 1, hidden: true }
 	    ],
 	    bbar: {
 	    	xtype: 'pagingtoolbar',

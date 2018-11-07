@@ -57,7 +57,7 @@
 				afterrender: function(field) { field.focus(true,500); },
 		        specialkey: function(field, e) {
 					if (e.getKey() == e.ENTER) {
-						var txtval = field.value;
+						var txtval = field.getValue();
 						var len = txtval.length;
 						if (len != 0) {
 							Ext.ComponentQuery.query('textfield[name=drpbk_partno]')[0].setDisabled(false);
@@ -66,7 +66,7 @@
 					}
 		        },
 		        change: function(field) {
-					var txtval = field.value;
+					var txtval = field.getValue();
 					var len = txtval.length;
 					if (len == 0) {
 						Ext.ComponentQuery.query('textfield[name=drpbk_partno]')[0].setDisabled(true);

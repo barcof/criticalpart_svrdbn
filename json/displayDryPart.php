@@ -14,7 +14,7 @@
 
 	// echo "declare @totalcount as int exec displayDetailPart $start, $limit, '{partno}', @totalcount=@totalcount out";
 
-	$totalcount = $sql->fields['7'];
+	$totalcount = $sql->fields['9'];
 	$return = array();
 
 		for($i=0;!$sql->EOF;$i++) {
@@ -24,7 +24,9 @@
 			$return[$i]['opendate'] 	= trim($sql->fields['3']);
 			$return[$i]['scanin'] 		= trim($sql->fields['4']);
 			$return[$i]['scanout'] 		= trim($sql->fields['5']);
-			$return[$i]['nik'] 			= trim($sql->fields['6']);
+			$return[$i]['nikopen'] 		= trim($sql->fields['6']);
+			$return[$i]['nikin'] 		= trim($sql->fields['7']);
+			$return[$i]['nikout'] 		= trim($sql->fields['8']);
 
 			$sql->MoveNext();
 		}

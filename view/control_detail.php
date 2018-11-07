@@ -171,18 +171,19 @@
 					afterrender: function(field) { field.focus(true,500); },
 			        specialkey: function(field, e) {
 						if (e.getKey() == e.ENTER) {
-							var txtval = field.value;
+							var txtval = field.getValue();
 							var len = txtval.length;
-							if (len != 0) {
-								Ext.ComponentQuery.query('textfield[name=detpart]')[0].setDisabled(false);
+							if (len == 0) {
+								// Ext.ComponentQuery.query('textfield[name=detpart]')[0].setDisabled(true);
 							} else {
 
+								Ext.ComponentQuery.query('textfield[name=detpart]')[0].setDisabled(false);
+								Ext.ComponentQuery.query('textfield[name=detpart]')[0].focus(true,1);
 							}
-							Ext.ComponentQuery.query('textfield[name=detpart]')[0].focus(true,1);
 						}
 			        },
 			        change: function(field) {
-						var txtval = field.value;
+						var txtval = field.getValue();
 						var len = txtval.length;
 						if (len == 0) {
 							Ext.ComponentQuery.query('textfield[name=detpart]')[0].setDisabled(true);
