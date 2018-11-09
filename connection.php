@@ -7,10 +7,12 @@ include 'adodb/adodb-errorpear.inc.php';
   $user = 'sa';
   $pass = 'JvcSql@123';
   $dbase = 'CRITICALPART';
-  $server = "Driver={SQL Server};Server=SVRDBN\JEINSQL2012trc;Database=$dbase;";
+  // $server = "Driver={SQL Server};Server=SVRDBN\JEINSQL2012trc;Database=$dbase;";
+  $server = "Driver={SQL Server};Server=SVRDBT\SQL2012;Database=$dbase;";
 
   $conn = ADONewConnection($dbasetype);
   $conn->Connect($server, $user, $pass);
+
 // Server in the this format: <computer>\<instance name> or
 // <server>,<port> when using a non default port number
 // $conn = ADONewConnection('mssql');
