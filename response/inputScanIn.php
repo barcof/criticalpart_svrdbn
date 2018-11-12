@@ -3,7 +3,7 @@
   include '../connection.php';
   date_default_timezone_set("Asia/jakarta");
 
-  $drypartno = isset($_REQUEST['drypartno']) ? $_REQUEST['drypartno'] : "";
+  $dryscanin = isset($_REQUEST['dryscanin']) ? $_REQUEST['dryscanin'] : "";
   $raw_nik   = isset($_REQUEST['drynik']) ? $_REQUEST['drynik'] : "";
   $scancode  = isset($_REQUEST['scancode']) ? $_REQUEST['scancode'] : "";
   $len       = strlen($raw_nik);
@@ -18,39 +18,33 @@
   // | 4 = PART BELUM DI REGISTER |
   // +============================+
   try {
-    $chkexp = $conn->Execute(" SELECT selflife, floorlife FROM tb_ctrlopen WHERE partno = '{$drypartno}' ");
+    $chkexp = $conn->Execute(" SELECT selflife, floorlife FROM tb_ctrlopen WHERE partno = '{$dryscanin}' ");
     $getselflife = $chkexp->fields[0];
     $getfloorlife = $chkexp->fields[1];
     $chkexp->Close();
 
-    // echo $getselflife;
-    // echo '||';
-    // echo $getdate;
-    // echo '||';
-    // echo $getfloorlife;
-    // echo '||';
      $var_msg = "";
-
-    if ($getdate > $getselflife) {
-      // MESSAGE FOR BAKING
+    if ($getselflife == NULL) {
+      $var_msg = 3;
+    } 
+    elseif ($getdate > $getselflife) {
+      // SHOW MESSAGE IF PART EXPIRED
       $var_msg = 2;
     } else {
-      // if ($getfloorlife == '') {
-      //   $sql = $conn->Execute(" EXEC insertDryPart '{$drypartno}','{$nik}' ");
-      //   $sql->Close();
-
-      //   $var_msg = 1;
-      // }
-      // else 
       if (($getdate > $getfloorlife) && $getfloorlife != ''){
-        // MESSAGE FOR BAKING
+        // SHOW MESSAGE IF PART EXPIRED
         $var_msg = 2;
       } else {
-        $sql = $conn->Execute(" EXEC insertDryPart_New '{$drypartno}','{$nik}','{$scancode}' ");
+        // echo "EXEC insertDryPart_New '{$dryscanin}','{$nik}','{$scancode}'";
+        $sql = $conn->Execute(" EXEC insertDryPart_New '{$dryscanin}','{$nik}','{$scancode}' ");
         $message = $sql->fields[0];
         $sql->Close();
-
-        $var_msg = 1;
+        // echo $message;
+        if ($message) {
+          $var_msg = $message;
+        } else {
+          $var_msg = 1;
+        }
       }
     }
 
@@ -65,25 +59,46 @@
       $error_msg = str_replace(chr(50), "", $error);
 
       echo "{'success': false,'msg':$error_msg}";
-      break;
+    break;
 
     case 1:
       echo "{'success': true,'msg': 'Successfully save data'}";
-      break;
+    break;
 
     case 2:
       echo "{
         'success': false,
-        'msg': '<h3 style=\"color:#b71c1c;text-align:center\">UNFORTUNATELY THIS PART ALREADY EXPIRED !<br> PLEASE DO BAKING PROCEDURE</h3>'
+        'msg': '<h3 style=\"color:#b71c1c;text-align:center\">UNFORTUNATELY THIS PART ALREADY EXPIRED !<br> PLEASE DO BAKING PROCEDURE</h3><br>$note'
       }";
-      break;
+    break;
+
+    case 3:
+      echo "{
+        'success': false,
+        'msg' : '<h3 style=\"text-align:center\">PART NOT YET REGISTER</h3>'
+      }";
+    break;
+
+    case 6:
+      echo "{
+        'success': false,
+        'msg' : '<h3 style=\"text-align:center\">PART NOT YET SCAN OUT</h3>'
+      }";
+    break;
+
+    case 8:
+      echo "{
+        'success': false,
+        'msg' : '<h3 style=\"text-align:center\">PART ALREADY SCAN IN</h3>'
+      }";
+    break;
 
     case 23000:
       echo "{
         'success': false,
         'msg': 'Duplicate Data.'
       }";
-      break;
+    break;
   }
   $conn->Close();
   $conn = NULL;

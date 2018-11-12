@@ -147,46 +147,157 @@
 		// title: 'FORM CONTROL DRY PART',
 		// header: { titleAlign: 'center' },
 		name: 'form_drypart',
-		layout: 'anchor',
-		width: 500,
+		// layout: 'anchor',
+		layout: {
+			type: 'vbox',
+			pack: 'center',
+			align: 'stretch'
+		},
+		// width: 500,
 		bodyStyle: {
         	background: 'rgba(255, 255, 255, 0)'
         },
 		defaults: {
-		    anchor: '100%',
-		    labelWidth: 150,
-		    padding: '5 0 0 0',
 		    fieldStyle: 'font-size:20px;text-align:center;'
+
 		},
 		defaultType: 'textfield',
 		items: [{
 			emptyText: 'SCAN NIK',
 			name: 'drynik',
-			// value: '37297',
 			selectOnFocus: true,
+			allowBlank: false,
 			listeners: {
-				afterrender: function(field) { field.focus(true,500); },
-		        specialkey: function(field, e) {
-					if (e.getKey() == e.ENTER) {
-						var txtval = field.getValue();
-						var len = txtval.length;
-						if (len != 0) {
-							Ext.ComponentQuery.query('textfield[name=drypartno]')[0].setDisabled(false);
-						} else {
-
-						}
-						Ext.ComponentQuery.query('textfield[name=drypartno]')[0].focus(true,1);
-					}
-		        },
-		        change: function(field) {
-					var txtval = field.getValue();
-					var len = txtval.length;
-					if (len == 0) {
-						Ext.ComponentQuery.query('textfield[name=drypartno]')[0].setDisabled(true);
-					}
-				}
+				afterrender: function(field) { field.focus(true,500); }
 			}
 		}, {
+			xtype: 'fieldcontainer',
+			cls: 'customLabel',
+			labelStyle: 'color:#263238;letter-spacing:1px',
+			layout: 'hbox',
+			defaults: {
+			    fieldStyle: 'font-size:12px;text-align:center;'
+			},
+			defaultType: 'textfield',
+			items: [{
+					emptyText: 'OPEN PART',
+					name: 'dryopenpart', // HUMIDITY TEMPERATURE MIN VALUE
+					width: 225,
+					listeners: {
+						specialkey: function(field, e) {
+							if (e.getKey() == e.ENTER) {
+								var form = this.up('form').getForm();
+								if(form.isValid()) {
+									form.submit({
+										url: 'response/inputOpenDate.php',
+										params: 'scancode='+0,
+										waitMsg : 'Now transfering data, please wait..',
+										success : function(form, action) {
+					                        Ext.toast({
+											     html: 'Data Saved',
+											     title: 'SUCCESS - INOFRMATION',
+											     width: 200,
+											     align: 't'
+											 });
+					                        drypart.loadPage(1);
+					                        form.reset();
+					                    },
+					                    failure : function(form, action) {
+					                        Ext.Msg.show({
+						                        title   : 'OOPS, AN ERROR JUST HAPPEN !',
+						                        icons   : Ext.Msg.ERROR,
+						                        msg     : action.result.msg,
+						                        buttons : Ext.Msg.OK
+					                        });
+					                    }
+									});
+								}
+							}
+				        }
+					}
+				}, {
+					xtype: 'label',
+					text: '_',
+					width: 10
+				}, {
+					emptyText: 'SCAN IN',
+					name: 'dryscanin', // HUMIDITY TEMPERATURE MAX VALUE
+					width: 225,
+					listeners: {
+						specialkey: function(field, e) {
+							if (e.getKey() == e.ENTER) {
+								var form = this.up('form').getForm();
+								if(form.isValid()) {
+									form.submit({
+										url: 'response/inputScanIn.php',
+										params: 'scancode='+1,
+										waitMsg : 'Now transfering data, please wait..',
+										success : function(form, action) {
+					                        Ext.toast({
+											     html: 'Data Saved',
+											     title: 'SUCCESS - INOFRMATION',
+											     width: 200,
+											     align: 't'
+											 });
+					                        drypart.loadPage(1);
+					                        form.reset();
+					                    },
+					                    failure : function(form, action) {
+					                        Ext.Msg.show({
+						                        title   : 'OOPS, AN ERROR JUST HAPPEN !',
+						                        icons   : Ext.Msg.ERROR,
+						                        msg     : action.result.msg,
+						                        buttons : Ext.Msg.OK
+					                        });
+					                    }
+									});
+								}
+							}
+				        }
+					}
+				}, {
+					xtype: 'label',
+					text: '_',
+					width: 10
+				}, {
+					emptyText: 'SCAN OUT',
+					name: 'dryscanout', // HUMIDITY TEMPERATURE MAX VALUE
+					width: 225,
+					listeners: {
+						specialkey: function(field, e) {
+							if (e.getKey() == e.ENTER) {
+								var form = this.up('form').getForm();
+								if(form.isValid()) {
+									form.submit({
+										url: 'response/inputScanOut.php',
+										params: 'scancode='+2,
+										waitMsg : 'Now transfering data, please wait..',
+										success : function(form, action) {
+					                        Ext.toast({
+											     html: 'Data Saved',
+											     title: 'SUCCESS - INOFRMATION',
+											     width: 200,
+											     align: 't'
+											 });
+					                        drypart.loadPage(1);
+					                        form.reset();
+					                    },
+					                    failure : function(form, action) {
+					                        Ext.Msg.show({
+						                        title   : 'OOPS, AN ERROR JUST HAPPEN !',
+						                        icons   : Ext.Msg.ERROR,
+						                        msg     : action.result.msg,
+						                        buttons : Ext.Msg.OK
+					                        });
+					                    }
+									});
+								}
+							}
+				        }
+					}
+				}]
+		},
+		/* {
 			emptyText: 'SCAN PART NUMBER',
 			name: 'drypartno',
 			disabled: true,
@@ -197,6 +308,7 @@
 						if(form.isValid()) {
 							form.submit({
 								url: 'response/inputDryPart.php',
+								params: 'scancode='+2,
 								waitMsg : 'Now transfering data, please wait..',
 								success : function(form, action) {
 									// Ext.Msg.alert('Success', action.result.msg);
@@ -230,9 +342,11 @@
 					}
 		        }
 			}
-		}, {
+		}, */
+		{
 			emptyText: 'CHECK LIFETIME PART',
 			name: 'drycheck',
+			// width: 700,
 			listeners: {
 				specialkey: function(field, e) {
 					if (e.getKey() == e.ENTER) {
