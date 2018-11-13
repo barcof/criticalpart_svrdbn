@@ -8,7 +8,7 @@
 	var store_detail = Ext.create('Ext.data.Store',{
 		model: 'detail_part',
 		autoLoad: true,
-		pageSize: 5,
+		pageSize: 10,
 		proxy: {
 			type: 'ajax',
 			url: 'json/displayDetailPart.php',

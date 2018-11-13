@@ -239,7 +239,10 @@
 					var len = txtval.length;
 					if (len == 0) {
 						Ext.ComponentQuery.query('textfield[name=br_newpartno]')[0].setDisabled(true);
-					} else { }
+					} else {
+						field.setValue(field.getValue().toUpperCase());
+					}
+
 				}
 			}
 		}, {
