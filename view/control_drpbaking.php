@@ -91,6 +91,7 @@
 			                        	msg     : action.result.msg,
 			                        	buttons : Ext.Msg.OK
 			                        });
+			                        store_bakingdry.loadPage(1);
 			                        field.reset();
 			                    },
 			                    failure : function(form, action) {
@@ -105,7 +106,10 @@
 						}
 						
 					}
-		        }
+		        },
+		        change:function(field) {
+	                field.setValue(field.getValue().toUpperCase());
+	            }
 			}
 		}],
 		dockedItems: toolbar_bakingdry

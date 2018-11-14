@@ -18,13 +18,21 @@
 
 		today = yyyy + '-' + mm + '-' + dd +' '+ H + ':' + i + ':' + s;
 
-		if (val == null || val == '') {
-			return val;
-		} else {
-			if (today > val) {
-				return ("<span style=color:red;>"+val+"<br>( EXPIRED PART )</span>");
-			} else { return val; }
-		}
+		if (mm == val.substr(5,2)-1) {
+			return ("<span style=color:#ff6f00;><b>"+val+"</b><br>( WILL BE EXPIRED SOON )</span>");
+		} else { return (val); }
+
+		if (today > val) {
+			return ("<span style=color:red;>"+val+" ( EXPIRED PART )</span>");
+		} else { return (val); }
+
+		// if (val == null || val == '') {
+		// 	return val;
+		// } else {
+		// 	if (today > val) {
+		// 		return ("<span style=color:red;>"+val+"<br>( EXPIRED PART )</span>");
+		// 	} else { return val; }
+		// }
 	}
 
 	Ext.define('open_part',{
@@ -54,76 +62,77 @@
 			defaultType: 'button',
 			scale: 'medium'
 		},
-		items: [{
-			name: 'update',
-			icon: 'resources/save.png',
-			handler: function() {
-				var getForm = this.up('form').getForm();
-				if (getForm.isValid()) {
-					getForm.submit({
-						url: 'response/updateExp.php',
-						waitMsg : 'Now transfering data, please wait..',
-						success : function(form, action) {
-	                        Ext.Msg.show({
-	                        	title   : 'SUCCESS',
-	                        	msg     : action.result.msg,
-	                        	buttons : Ext.Msg.OK
-	                        });
-	                        exp_control.loadPage(1);
-	                     },
-	                    failure : function(form, action) {
-	                        Ext.Msg.show({
-		                        title   : 'OOPS, AN ERROR JUST HAPPEN !',
-		                        icons   : Ext.Msg.ERROR,
-		                        msg     : action.result.msg,
-		                        buttons : Ext.Msg.OK
-	                        });
-	                      }
-					});
-				}
-			}
-		},{
-			name: 'delete',
-			icon: 'resources/delete.png',
-			handler: function() {
-				var rec = grid_exp.getSelectionModel().getSelection();
-				var len = rec.length;
-				if (rec == 0) {
-					Ext.Msg.show({
-						title: 'Failure - Select Data',
-						icon: Ext.Msg.ERROR,
-						msg: 'Select any field you desire to delete',
-						buttons: Ext.Msg.OK
-					});
-				} else {
-					Ext.Msg.confirm('Confirm', 'Are you sure want to delete data ?', function(btn) {
-						if(btn == 'yes') {
-							for (var i=0;i<len;i++) {
-								Ext.Ajax.request({
-									url: 'response/deleteExp.php',
-									method: 'POST',
-									params: 'unid='+rec[i].data.unid,
-									success: function(obj) {
-										var resp = obj.responseText;
-										if(resp !=0) {
-											exp_control.loadPage(1);
-										} else {
-											Ext.Msg.show({
-												title: 'Delete Data',
-												icon: Ext.Msg.ERROR,
-												msg: resp,
-												buttons: Ext.Msg.OK
-											});
-										}
-									}
-								});
-							}
-						}
-					});
-				}
-			}
-		},
-		,'->',
+		items: [
+		// {
+		// 	name: 'update',
+		// 	icon: 'resources/save.png',
+		// 	handler: function() {
+		// 		var getForm = this.up('form').getForm();
+		// 		if (getForm.isValid()) {
+		// 			getForm.submit({
+		// 				url: 'response/updateExp.php',
+		// 				waitMsg : 'Now transfering data, please wait..',
+		// 				success : function(form, action) {
+	 //                        Ext.Msg.show({
+	 //                        	title   : 'SUCCESS',
+	 //                        	msg     : action.result.msg,
+	 //                        	buttons : Ext.Msg.OK
+	 //                        });
+	 //                        exp_control.loadPage(1);
+	 //                     },
+	 //                    failure : function(form, action) {
+	 //                        Ext.Msg.show({
+		//                         title   : 'OOPS, AN ERROR JUST HAPPEN !',
+		//                         icons   : Ext.Msg.ERROR,
+		//                         msg     : action.result.msg,
+		//                         buttons : Ext.Msg.OK
+	 //                        });
+	 //                      }
+		// 			});
+		// 		}
+		// 	}
+		// },{
+		// 	name: 'delete',
+		// 	icon: 'resources/delete.png',
+		// 	handler: function() {
+		// 		var rec = grid_exp.getSelectionModel().getSelection();
+		// 		var len = rec.length;
+		// 		if (rec == 0) {
+		// 			Ext.Msg.show({
+		// 				title: 'Failure - Select Data',
+		// 				icon: Ext.Msg.ERROR,
+		// 				msg: 'Select any field you desire to delete',
+		// 				buttons: Ext.Msg.OK
+		// 			});
+		// 		} else {
+		// 			Ext.Msg.confirm('Confirm', 'Are you sure want to delete data ?', function(btn) {
+		// 				if(btn == 'yes') {
+		// 					for (var i=0;i<len;i++) {
+		// 						Ext.Ajax.request({
+		// 							url: 'response/deleteExp.php',
+		// 							method: 'POST',
+		// 							params: 'unid='+rec[i].data.unid,
+		// 							success: function(obj) {
+		// 								var resp = obj.responseText;
+		// 								if(resp !=0) {
+		// 									exp_control.loadPage(1);
+		// 								} else {
+		// 									Ext.Msg.show({
+		// 										title: 'Delete Data',
+		// 										icon: Ext.Msg.ERROR,
+		// 										msg: resp,
+		// 										buttons: Ext.Msg.OK
+		// 									});
+		// 								}
+		// 							}
+		// 						});
+		// 					}
+		// 				}
+		// 			});
+		// 		}
+		// 	}
+		// },
+		// '->',
 		{
 			text: 'SINGLE LABEL',
 			name: 'borrow',
@@ -149,7 +158,7 @@
 				    }
 				}).show();
 			}
-		}, {
+		}, '->' ,{
 			name: 'create',
 			icon: 'resources/create.png',
 			formBind: true,
@@ -372,20 +381,11 @@
 				emptyText: 'SCAN PART NUMBER',
 				name: 'openpartno', // PART NUMBER
 				disabled: true,
-				// listeners: {
-				// 	specialkey: function(field, e) {
-				// 		if (e.getKey() == e.ENTER) {
-				// 			var form = this.up('form').getForm();
-				// 			if(form.isValid()) {
-				// 				form.submit({
-				// 					form.submit({
-				// 						url: 'response/inputScan.php'
-				// 					});
-				// 				});
-				// 			}
-				// 		}
-			 //        }
-				// }
+				listeners: {
+					change:function(field) {
+		                field.setValue(field.getValue().toUpperCase());
+		            }
+				}
 			}, {
 				xtype: 'datefield',
 				name: 'openexpdate',  // EXPIRED DATE

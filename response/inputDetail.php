@@ -1,6 +1,7 @@
 <?php
   // session_start();
   include '../connection.php';
+  error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 
   $partno     = isset($_REQUEST['detpart']) ? $_REQUEST['detpart'] : "";
   $htempmin   = isset($_REQUEST['htempmin']) ? $_REQUEST['htempmin'] : 0;
@@ -27,16 +28,27 @@
     $var_msg = $conn->ErrorNo();
   }
   switch ($var_msg) {
-    case $conn->ErrorNo() :
+    case ($var_msg != 23000) :
+      // $error = $conn->ErrorNo();
       $error = $conn->ErrorMsg();
-      $error_msg = str_replace(chr(50), "", $error);
+      $error_rep1 = str_replace( "'", "`", $error);
+      $error_rep2 = str_replace( "[", " ", $error_rep1);
+      $error_rep3 = str_replace( "]", " ", $error_rep2);
 
-      echo "{'success':'false','msg':$error_msg }";
-      break;
+      // echo "{'success':'false','msg':$error_msg }";
+      echo "{'success': false,'msg': '$error_rep3' }";
+    break;
 
     case 1:
       echo "{'success': true,'msg': 'Successfully save data'}";
-      break;
+    break;
+
+    case 23000:
+      echo "{
+        'success': false,
+        'msg': '<h1 style=\"text-align:center;color:red\">Duplicate Data</h1>'
+      }";
+    break;
   }
   $conn->Close();
   $conn = NULL;

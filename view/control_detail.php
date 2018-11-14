@@ -8,7 +8,7 @@
 	var store_detail = Ext.create('Ext.data.Store',{
 		model: 'detail_part',
 		autoLoad: true,
-		pageSize: 10,
+		pageSize: 20,
 		proxy: {
 			type: 'ajax',
 			url: 'json/displayDetailPart.php',
@@ -27,82 +27,83 @@
 			defaultType: 'button',
 			scale: 'small'
 		},
-		items: [{
-			name: 'update',
-			text: 'UPDATE',
-			icon: 'resources/save_s.png',
-			handler: function() {
-				var getForm = this.up('form').getForm();
-				if (getForm.isValid()) {
-					getForm.submit({
-						url: 'response/updateExp.php',
-						waitMsg : 'Now transfering data, please wait..',
-						success : function(form, action) {
-	                        Ext.Msg.show({
-	                        	title   : 'SUCCESS',
-	                        	msg     : action.result.msg,
-	                        	buttons : Ext.Msg.OK
-	                        });
-	                        exp_control.loadPage(1);
-	                     },
-	                    failure : function(form, action) {
-	                        Ext.Msg.show({
-		                        title   : 'OOPS, AN ERROR JUST HAPPEN !',
-		                        icons   : Ext.Msg.ERROR,
-		                        msg     : action.result.msg,
-		                        buttons : Ext.Msg.OK
-	                        });
-	                      }
-					});
-				}
-			}
-		},{
-			name: 'delete',
-			text: 'DELETE',
-			icon: 'resources/delete_s.png',
-			handler: function() {
-				var rec = grid_exp.getSelectionModel().getSelection();
-				var len = rec.length;
-				if (rec == 0) {
-					Ext.Msg.show({
-						title: 'Failure - Select Data',
-						icon: Ext.Msg.ERROR,
-						msg: 'Select any field you desire to delete',
-						buttons: Ext.Msg.OK
-					});
-				} else {
-					Ext.Msg.confirm('Confirm', 'Are you sure want to delete data ?', function(btn) {
-						if(btn == 'yes') {
-							for (var i=0;i<len;i++) {
-								Ext.Ajax.request({
-									url: 'response/deleteExp.php',
-									method: 'POST',
-									params: 'unid='+rec[i].data.unid,
-									success: function(obj) {
-										var resp = obj.responseText;
-										if(resp !=0) {
-											exp_control.loadPage(1);
-										} else {
-											Ext.Msg.show({
-												title: 'Delete Data',
-												icon: Ext.Msg.ERROR,
-												msg: resp,
-												buttons: Ext.Msg.OK
-											});
-										}
-									}
-								});
-							}
-						}
-					});
-				}
-			}
-		},
-		'->',
+		items: [
+		// {
+		// 	name: 'update',
+		// 	text: 'UPDATE',
+		// 	icon: 'resources/save_s.png',
+		// 	handler: function() {
+		// 		var getForm = this.up('form').getForm();
+		// 		if (getForm.isValid()) {
+		// 			getForm.submit({
+		// 				url: 'response/updateExp.php',
+		// 				waitMsg : 'Now transfering data, please wait..',
+		// 				success : function(form, action) {
+	 //                        Ext.Msg.show({
+	 //                        	title   : 'SUCCESS',
+	 //                        	msg     : action.result.msg,
+	 //                        	buttons : Ext.Msg.OK
+	 //                        });
+	 //                        exp_control.loadPage(1);
+	 //                     },
+	 //                    failure : function(form, action) {
+	 //                        Ext.Msg.show({
+		//                         title   : 'OOPS, AN ERROR JUST HAPPEN !',
+		//                         icons   : Ext.Msg.ERROR,
+		//                         msg     : action.result.msg,
+		//                         buttons : Ext.Msg.OK
+	 //                        });
+	 //                      }
+		// 			});
+		// 		}
+		// 	}
+		// },{
+		// 	name: 'delete',
+		// 	text: 'DELETE',
+		// 	icon: 'resources/delete_s.png',
+		// 	handler: function() {
+		// 		var rec = grid_exp.getSelectionModel().getSelection();
+		// 		var len = rec.length;
+		// 		if (rec == 0) {
+		// 			Ext.Msg.show({
+		// 				title: 'Failure - Select Data',
+		// 				icon: Ext.Msg.ERROR,
+		// 				msg: 'Select any field you desire to delete',
+		// 				buttons: Ext.Msg.OK
+		// 			});
+		// 		} else {
+		// 			Ext.Msg.confirm('Confirm', 'Are you sure want to delete data ?', function(btn) {
+		// 				if(btn == 'yes') {
+		// 					for (var i=0;i<len;i++) {
+		// 						Ext.Ajax.request({
+		// 							url: 'response/deleteExp.php',
+		// 							method: 'POST',
+		// 							params: 'unid='+rec[i].data.unid,
+		// 							success: function(obj) {
+		// 								var resp = obj.responseText;
+		// 								if(resp !=0) {
+		// 									exp_control.loadPage(1);
+		// 								} else {
+		// 									Ext.Msg.show({
+		// 										title: 'Delete Data',
+		// 										icon: Ext.Msg.ERROR,
+		// 										msg: resp,
+		// 										buttons: Ext.Msg.OK
+		// 									});
+		// 								}
+		// 							}
+		// 						});
+		// 					}
+		// 				}
+		// 			});
+		// 		}
+		// 	}
+		// },
+		// '->',
 		{
 			name: 'create',
 			text: 'INPUT',
-			icon: 'resources/create.png',
+			icon: 'resources/create_s.png',
 			formBind: true,
 			handler: function() {
 				var getForm = this.up('form').getForm();
@@ -117,6 +118,7 @@
 	                        	buttons : Ext.Msg.OK
 	                        });
 	                        store_detail.loadPage(1);
+	                        form.reset();
 	                     },
 	                    failure : function(form, action) {
 	                        Ext.Msg.show({
