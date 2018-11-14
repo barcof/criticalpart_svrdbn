@@ -404,8 +404,8 @@
 	    	{ text: 'SCAN IN', dataIndex: 'scanin', flex: 1 },
 	    	{ text: 'SCAN OUT', dataIndex: 'scanout', flex: 1 },
 	    	{ text: 'PIC OPEN', dataIndex: 'nikopen', flex: 1 },
-	    	{ text: 'PIC SCAN IN', dataIndex: 'nikin', flex: 1 },
-	    	{ text: 'PIC SCAN OUT', dataIndex: 'nikout', flex: 1 }
+	    	{ text: 'PIC SCAN IN', dataIndex: 'nikin', flex: 1, hidden: true },
+	    	{ text: 'PIC SCAN OUT', dataIndex: 'nikout', flex: 1, hidden: true }
 	    ],
 	    bbar: {
 	    	xtype: 'pagingtoolbar',
