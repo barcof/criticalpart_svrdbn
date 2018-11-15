@@ -8,7 +8,7 @@
 	//-------------------------------
 	// $trimpart = trim($_REQUEST['partno']);
 
-	$partno = trim(isset($_REQUEST['partno']) ? $_REQUEST['partno'] : '');
+	$partno = trim(isset($_REQUEST['dryfldsrc']) ? $_REQUEST['dryfldsrc'] : '');
 
 	$sql = $conn->Execute("declare @totalcount as int exec displayDryPart $start, $limit, '{$partno}', @totalcount=@totalcount out");
 
