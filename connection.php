@@ -1,14 +1,15 @@
 <?php
 include 'adodb/adodb.inc.php';
-include 'adodb/adodb-errorhandler.inc.php';
+// include 'adodb/adodb-errorhandler.inc.php';
+include 'adodb/adodb-exceptions.inc.php';
 include 'adodb/adodb-errorpear.inc.php';
 
   $dbasetype = 'odbc_mssql';
   $user = 'sa';
   $pass = 'JvcSql@123';
   $dbase = 'CRITICALPART';
-  // $server = "Driver={SQL Server};Server=SVRDBN\JEINSQL2012trc;Database=$dbase;";
-  $server = "Driver={SQL Server};Server=SVRDBT\SQL2012;Database=$dbase;";
+  $server = "Driver={SQL Server};Server=SVRDBN\JEINSQL2012trc;Database=$dbase;";
+  // $server = "Driver={SQL Server};Server=SVRDBT\SQL2012;Database=$dbase;";
 
   $conn = ADONewConnection($dbasetype);
   $conn->Connect($server, $user, $pass);
