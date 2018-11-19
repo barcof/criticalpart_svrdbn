@@ -68,7 +68,7 @@
     case 2:
       echo "{
         'success': false,
-        'msg': '<h3 style=\"color:#b71c1c;text-align:center\">UNFORTUNATELY THIS PART ALREADY EXPIRED !<br> PLEASE DO BAKING PROCEDURE</h3><br>$note'
+        'msg': '<h3 style=\"color:#b71c1c;text-align:center\">UNFORTUNATELY THIS PART ALREADY EXPIRED !<br> PLEASE DO BAKING PROCEDURE</h3><br>'
       }";
     break;
 
