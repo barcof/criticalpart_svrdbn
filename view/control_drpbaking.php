@@ -17,6 +17,11 @@
 				rootProperty: 'data',
 				totalProperty: 'totalcount'
 			}
+		},
+		listeners: {
+			load: function(store) {
+				store.proxy.setExtraParam('drpbk_fldsrc','');
+			}
 		}
 	});
 
@@ -146,11 +151,14 @@
 	    		listeners: {
 	    			specialkey: function(field, e) {
 						if (e.getKey() == e.ENTER) {
-							// exp_control.proxy.setExtraParam('drpbk_fldsrc',field.getValue());
-							// exp_control.loadPage(1);
+							store_bakingdry.proxy.setExtraParam('drpbk_fldsrc',field.getValue());
+							store_bakingdry.loadPage(1);
 							// console.log(field.value);
 						}
-	                }
+	                },
+	                change:function(field){
+		                field.setValue(field.getValue().toUpperCase());
+		            }
 	    		}
 	    	}]
 	    }

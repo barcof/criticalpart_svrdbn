@@ -5,9 +5,9 @@
 	$limit = @$_REQUEST['limit'];
 	$start = ( $page * $limit ) + 1;
 
-	$partno = isset($_REQUEST['drpbk_fldsrc']) ? $_REQUEST['drpbk_fldsrc'] : "";
+	$drpbk_fldsrc = isset($_REQUEST['drpbk_fldsrc']) ? $_REQUEST['drpbk_fldsrc'] : "";
 
-	$sql = $conn->Execute("declare @totalcount as int exec displayDryBaking $start, $limit, '{$partno}', @totalcount=@totalcount out");
+	$sql = $conn->Execute("declare @totalcount as int exec displayDryBaking $start, $limit, '{$drpbk_fldsrc}', @totalcount=@totalcount out");
 
 	$totalcount = $sql->fields['9'];
 	$return = array();

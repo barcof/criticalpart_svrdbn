@@ -21,6 +21,11 @@
 				rootProperty: 'data',
 				totalProperty: 'totalcount'
 			}
+		},
+		listeners: {
+			load: function(store) {
+				store.proxy.setExtraParam('dryfldsrc','');
+			}
 		}
 	});
 	
@@ -102,36 +107,6 @@
 			}
 		},*/
 		'->',
-		// {
-		// 	name: 'create',
-		// 	icon: 'resources/create.png',
-		// 	formBind: true,
-		// 	handler: function() {
-		// 		var getForm = this.up('form').getForm();
-		// 		if (getForm.isValid()) {
-		// 			getForm.submit({
-		// 				url: 'response/inputExp.php',
-		// 				waitMsg : 'Now transfering data, please wait..',
-		// 				success : function(form, action) {
-	 //                        Ext.Msg.show({
-	 //                        	title   : 'SUCCESS',
-	 //                        	msg     : action.result.msg,
-	 //                        	buttons : Ext.Msg.OK
-	 //                        });
-	 //                        exp_control.loadPage(1);
-	 //                     },
-	 //                    failure : function(form, action) {
-	 //                        Ext.Msg.show({
-		//                         title   : 'OOPS, AN ERROR JUST HAPPEN !',
-		//                         icons   : Ext.Msg.ERROR,
-		//                         msg     : action.result.msg,
-		//                         buttons : Ext.Msg.OK
-	 //                        });
-	 //                      }
-		// 			});
-		// 		}
-		// 	}
-		// }, 
 		{
 			name: 'reset',
 			icon: 'resources/reset.png',
@@ -144,16 +119,12 @@
 	});
 	
 	var form_drypart = Ext.create('Ext.form.Panel',{
-		// title: 'FORM CONTROL DRY PART',
-		// header: { titleAlign: 'center' },
 		name: 'form_drypart',
-		// layout: 'anchor',
 		layout: {
 			type: 'vbox',
 			pack: 'center',
 			align: 'stretch'
 		},
-		// width: 500,
 		bodyStyle: {
         	background: 'rgba(255, 255, 255, 0)'
         },
@@ -305,57 +276,9 @@
 			            }
 					}
 				}]
-		},
-		/* {
-			emptyText: 'SCAN PART NUMBER',
-			name: 'drypartno',
-			disabled: true,
-			listeners: {
-				specialkey: function(field, e) {
-					if (e.getKey() == e.ENTER) {
-						var form = this.up('form').getForm();
-						if(form.isValid()) {
-							form.submit({
-								url: 'response/inputDryPart.php',
-								params: 'scancode='+2,
-								waitMsg : 'Now transfering data, please wait..',
-								success : function(form, action) {
-									// Ext.Msg.alert('Success', action.result.msg);
-									// console.log(action);
-			                        // Ext.Msg.show({
-			                        // 	title   : 'SUCCESS',
-			                        // 	msg     : action.result.msg,
-			                        // 	buttons : Ext.Msg.OK
-			                        // });
-			                        Ext.toast({
-									     html: 'Data Saved',
-									     title: 'SUCCESS - INOFRMATION',
-									     width: 200,
-									     align: 't'
-									 });
-			                        drypart.loadPage(1);
-			                        field.reset();
-			                    },
-			                    failure : function(form, action) {
-			                    	// Ext.Msg.alert('Failed', action.result.msg);
-			                    	// console.log(action.result);
-			                        Ext.Msg.show({
-				                        title   : 'OOPS, AN ERROR JUST HAPPEN !',
-				                        icons   : Ext.Msg.ERROR,
-				                        msg     : action.result.msg,
-				                        buttons : Ext.Msg.OK
-			                        });
-			                    }
-							});
-						}
-					}
-		        }
-			}
-		}, */
-		{
+		}, {
 			emptyText: 'CHECK LIFETIME PART',
 			name: 'drycheck',
-			// width: 700,
 			listeners: {
 				specialkey: function(field, e) {
 					if (e.getKey() == e.ENTER) {
@@ -404,8 +327,8 @@
 	    	{ text: 'SCAN IN', dataIndex: 'scanin', flex: 1 },
 	    	{ text: 'SCAN OUT', dataIndex: 'scanout', flex: 1 },
 	    	{ text: 'PIC OPEN', dataIndex: 'nikopen', flex: 1 },
-	    	{ text: 'PIC SCAN IN', dataIndex: 'nikin', flex: 1, hidden: true },
-	    	{ text: 'PIC SCAN OUT', dataIndex: 'nikout', flex: 1, hidden: true }
+	    	{ text: 'PIC SCAN IN', dataIndex: 'nikin', flex: 1 },
+	    	{ text: 'PIC SCAN OUT', dataIndex: 'nikout', flex: 1 }
 	    ],
 	    bbar: {
 	    	xtype: 'pagingtoolbar',
@@ -422,9 +345,13 @@
 						if (e.getKey() == e.ENTER) {
 							drypart.proxy.setExtraParam('dryfldsrc',field.getValue());
 							drypart.loadPage(1);
+							open_part.loadPage(1);
 							// console.log(field.value);
 						}
-	                }
+	                },
+	                change:function(field){
+		                field.setValue(field.getValue().toUpperCase());
+		            }
 	    		}
 	    	}]
 	    }

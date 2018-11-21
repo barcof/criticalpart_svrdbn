@@ -17,6 +17,11 @@
 				rootProperty: 'data',
 				totalProperty: 'totalcount'
 			}
+		},
+		listeners: {
+			load: function (store) {
+				store.proxy.setExtraParam('detail_fldsrc','');
+			}
 		}
 	});
 	
@@ -404,15 +409,15 @@
 	    	store: store_detail,
 	    	items: ['->',{
 	    		xtype: 'textfield',
-	    		name: 'fldsrc',
+	    		name: 'detail_fldsrc',
 	    		width: 600,
 	    		emptyText: 'Search part number in here...',
 	    		fieldStyle: 'text-align:center;',
 	    		listeners: {
 	    			specialkey: function(field, e) {
 						if (e.getKey() == e.ENTER) {
-							exp_control.proxy.setExtraParam('fldsrc',field.getValue());
-							exp_control.loadPage(1);
+							store_detail.proxy.setExtraParam('detail_fldsrc',field.getValue());
+							store_detail.loadPage(1);
 							// console.log(field.value);
 						}
 	                },

@@ -8,9 +8,9 @@
 	//-------------------------------
 	// $trimpart = trim($_REQUEST['partno']);
 
-	$partno = trim(isset($_REQUEST['partno']) ? $_REQUEST['partno'] : '');
+	$stpartfldsrc = trim(isset($_REQUEST['stpartfldsrc']) ? $_REQUEST['stpartfldsrc'] : '');
 
-	$sql = $conn->Execute("declare @totalcount as int exec displayOpenPart $start, $limit, '{$partno}', @totalcount=@totalcount out");
+	$sql = $conn->Execute("declare @totalcount as int exec displayOpenPart $start, $limit, '{$stpartfldsrc}', @totalcount=@totalcount out");
 
 	// echo "declare @totalcount as int exec displayDetailPart $start, $limit, '{partno}', @totalcount=@totalcount out";
 

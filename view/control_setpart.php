@@ -12,18 +12,29 @@
 
 		// console.log(today);
 
-		if(dd<10) { dd = '0'+dd }
+		if(dd<10) { dd = '0'+dd };
 
-		if(mm<10) { mm = '0'+mm } 
+		if(mm<10) { mm = '0'+mm };
+
+		if(H<10) { H = '0'+H };
+
+		if(i<10) { i = '0'+i };
+
+		if(s<10) { s = '0'+s };
 
 		today = yyyy + '-' + mm + '-' + dd +' '+ H + ':' + i + ':' + s;
 
-		if (mm == val.substr(5,2)-1) {
-			return ("<span style=color:#ff6f00;><b>"+val+"</b><br>( WILL BE EXPIRED SOON )</span>");
-		} else { return (val); }
+		var lastmonth = (val.substr(5,2)-1)
 
-		if (today > val) {
-			return ("<span style=color:red;>"+val+" ( EXPIRED PART )</span>");
+		var valyear = (val.substr(0,4));
+
+		if ((lastmonth < mm) && (yyyy == valyear )) {
+			if (today >= val) {
+				return ("<span style=color:red;>"+val+"<br>( EXPIRED PART )</span>");
+			} else { 
+				// return (val); 
+				return ("<span style=color:#ff6f00;><b>"+val+"</b><br>( WILL BE EXPIRED SOON )</span>");
+			}
 		} else { return (val); }
 
 		// if (val == null || val == '') {
@@ -51,6 +62,11 @@
 				type: 'json',
 				rootProperty: 'data',
 				totalProperty: 'totalcount'
+			}
+		},
+		listeners: {
+			load: function(store) {
+				store.proxy.setExtraParam('stpartfldsrc','');
 			}
 		}
 	});
@@ -423,18 +439,21 @@
 	    	store: open_part,
 	    	items: ['->',{
 	    		xtype: 'textfield',
-	    		name: 'fldsrc',
+	    		name: 'stpartfldsrc',
 	    		width: 600,
 	    		emptyText: 'Search part number in here...',
 	    		fieldStyle: 'text-align:center;',
 	    		listeners: {
 	    			specialkey: function(field, e) {
 						if (e.getKey() == e.ENTER) {
-							exp_control.proxy.setExtraParam('fldsrc',field.getValue());
-							exp_control.loadPage(1);
+							open_part.proxy.setExtraParam('stpartfldsrc',field.getValue());
+							open_part.loadPage(1);
 							// console.log(field.value);
 						}
-	                }
+	                },
+	                change:function(field){
+		                field.setValue(field.getValue().toUpperCase());
+		            }
 	    		}
 	    	}]
 	    }
