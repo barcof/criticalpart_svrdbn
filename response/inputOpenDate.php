@@ -9,7 +9,9 @@
   $len       = strlen($raw_nik);
   $getdate   = date('Y-m-d H:i:s');
   // $getdate   = '2018-10-24 23:00:00';
-  if ($len == 5) { $nik = $raw_nik; } else { $nik = substr($raw_nik,2,5); };
+  if ($len == 5) { $nik = $raw_nik; }
+  else if ($len == 8) { $nik = substr(2,5); }
+  else { $var_msg = 10; };
   // +============================+
   // | WARNING MESSAGE            |
   // | 1 = PART SUDAH DI OPEN     |
@@ -90,6 +92,13 @@
       echo "{
         'success': false,
         'msg' : '<h3 style=\"text-align:center\">PART NOT YET SCAN OUT</h3>'
+      }";
+    break;
+
+    case 10: 
+      echo "{
+        'success': false,
+        'msg' : '<h3 style=\"text-align:center\">PLEASE SCAN NIK</h3>'
       }";
     break;
 
