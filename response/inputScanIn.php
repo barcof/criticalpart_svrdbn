@@ -9,6 +9,7 @@
   $len       = strlen($raw_nik);
   $getdate   = date('Y-m-d H:i:s');
   // $getdate   = '2018-10-24 23:00:00';
+  $nik = "";
   if ($len == 5) { $nik = $raw_nik; } else { $nik = substr($raw_nik,2,5); };
   // +============================+
   // | WARNING MESSAGE            |
