@@ -10,9 +10,7 @@
   $getdate   = date('Y-m-d H:i:s');
   // $getdate   = '2018-10-24 23:00:00';
   $nik = "";
-  if ($len == 5) { $nik = $raw_nik; }
-  else if ($len == 8) { $nik = substr(2,5); }
-  else { $var_msg = 10; };
+  if ($len == 5) { $nik = $raw_nik; } else if ($len == 8) { $nik = substr(2,5); } else { $var_msg = 10; };
   // +============================+
   // | WARNING MESSAGE            |
   // | 1 = PART SUDAH DI OPEN     |
