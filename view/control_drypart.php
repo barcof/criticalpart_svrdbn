@@ -13,6 +13,7 @@
 		model: 'drypart',
 		autoLoad: true,
 		pageSize: 25,
+		groupField: 'partno', // remove this to remove grouping
 		proxy: {
 			type: 'ajax',
 			url: 'json/displayDryPart.php',
@@ -311,12 +312,19 @@
 		dockedItems: [toolbar_drypart]
 	});
 
+	var groupingFeature = Ext.create('Ext.grid.feature.GroupingSummary',{
+		id: 'group',
+		ftype: 'groupingsummary',
+		enableGroupingMenu: true
+	});
+
 	var grid_drypart = Ext.create('Ext.grid.Panel', {
 		store: drypart,
 		selModel: Ext.create('Ext.selection.CheckboxModel'),
 	    viewConfig: {
 	    	enableTextSelection  : true
 	    },
+	    features: [groupingFeature],
 	    width: 400,
 	    columns: [
 	    	{ header: 'NO', xtype: 'rownumberer', width: 55, sortable: false },
