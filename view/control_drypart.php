@@ -4,6 +4,11 @@
 	include_once 'control_setpart.php';
 ?>
 <script type="text/javascript">
+
+	function whitespace(val) {
+		return '<div style="white-space: pre;">'+val+'</div>';
+	}
+
 	Ext.define('drypart',{
 		extend: 'Ext.data.Model',
 		fields: ['unid','id','partno','opendate','scanin','scanout','nikopen','nikin','nikout']
@@ -330,7 +335,7 @@
 	    	{ header: 'NO', xtype: 'rownumberer', width: 55, sortable: false },
 	    	{ text: 'UNIQUE ID', dataIndex: 'unid', hidden: true },
 	    	{ text: 'ID', dataIndex: 'id', hidden: true },
-	    	{ text: 'PART NUMBER', dataIndex: 'partno', flex: 1 },
+	    	{ text: 'PART NUMBER', dataIndex: 'partno', flex: 1, renderer: whitespace },
 	    	{ text: 'OPEN DATE', dataIndex: 'opendate', flex: 1 },
 	    	{ text: 'SCAN IN', dataIndex: 'scanin', flex: 1 },
 	    	{ text: 'SCAN OUT', dataIndex: 'scanout', flex: 1 },

@@ -1,5 +1,13 @@
 <script type="text/javascript">
 
+	function whitespace(val) {
+		return '<div style="white-space: pre;">'+val+'</div>';
+	}
+
+	// function upsize(val) {
+	// 	return '<font size="2" style="font-family:sans-serif; white-space:normal; line-height:1.5;">' + val + '</font>';
+	// }
+
 	Ext.define('bakingdry',{
 		extend: 'Ext.data.Model',
 		fields: ['unid','opid','partno','scanin','scanout','estmin','estmax','nik']
@@ -131,7 +139,7 @@
 	    	{ header: 'NO', xtype: 'rownumberer', width: 55, sortable: false },
 	    	{ text: 'UNIQUE ID', dataIndex: 'unid', flex: true, hidden: true },
 	    	{ text: 'ID', dataIndex: 'opid', flex: true, hidden: true },
-	    	{ text: 'PART NUMBER', dataIndex: 'partno', flex: 1 },
+	    	{ text: 'PART NUMBER', dataIndex: 'partno', flex: 1, renderer: whitespace },
 	    	{ text: 'SCAN IN', dataIndex: 'scanin', flex: 1 },
 	    	{ text: 'SCAN OUT', dataIndex: 'scanout', flex: 1 },
 	    	{ text: 'ESTIMATE TIME MIN', dataIndex: 'estmin', flex: 1 },

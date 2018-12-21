@@ -1,5 +1,9 @@
 <script type="text/javascript">
 
+	function whitespace(val) {
+		return '<div style="white-space: pre;">'+val+'</div>';
+	}
+
 	Ext.define('detail_part',{
 		extend: 'Ext.data.Model',
 		fields: ['unid','id','partno','htempmin','htempmax','humidmin','humidmax','lifetime','btempmin','btempmax','periodmin','periodmax','nik']
@@ -377,7 +381,7 @@
 	    	{ header: 'NO', xtype: 'rownumberer', width: 55, sortable: false },
 	    	{ text: 'UNIQUE ID', dataIndex: 'unid', hidden: true },
 	    	{ text: 'ID', dataIndex: 'id', flex: 1 },
-	    	{ text: 'PART NUMBER', dataIndex: 'partno', flex: 1 },
+	    	{ text: 'PART NUMBER', dataIndex: 'partno', flex: 1, renderer: whitespace },
 	    	// { text: 'PROD. DATE', dataIndex: 'proddate', flex: 1 },
 	    	{ header: 'CONDITION AFTER OPEN', columns: [
 	    		{ text: 'TEMPERATURE [°C]', columns:[

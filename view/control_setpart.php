@@ -1,4 +1,9 @@
 <script type="text/javascript">
+
+	function whitespace(val) {
+		return '<div style="white-space: pre;">'+val+'</div>';
+	}
+
 	var expstatus = function(val) {
 		// var len = val.substr(0,10);
 	  	// Harus di maintain karna status EXPIRED di hardcode
@@ -415,17 +420,24 @@
 		dockedItems: [toolbar_openpart]
 	});
 
+	var groupingFeature = Ext.create('Ext.grid.feature.GroupingSummary',{
+		id: 'group',
+		ftype: 'groupingsummary',
+		enableGroupingMenu: true
+	});
+
 	var grid_openpart = Ext.create('Ext.grid.Panel', {
 		store: open_part,
 		selModel: Ext.create('Ext.selection.CheckboxModel'),
 	    viewConfig: {
 	    	enableTextSelection  : true
 	    },
+	    features: [groupingFeature],
 	    columns: [
 	    	{ header: 'NO', xtype: 'rownumberer', width: 55, sortable: false },
 	    	{ text: 'UNIQUE ID', dataIndex: 'unid', hidden: true },
 	    	{ text: 'ID', dataIndex: 'openid', hidden: true },
-	    	{ text: 'PART NUMBER', dataIndex: 'partno', flex: 1 },
+	    	{ text: 'PART NUMBER', dataIndex: 'partno', flex: 1, renderer: whitespace },
 	    	{ text: 'QTY', dataIndex: 'qty', flex: 1 },
 	    	{ text: 'PRODUCTION DATE', dataIndex: 'proddate', flex: 1 },
 	    	{ text: '(SELF LIFE)<br>EXPIRED DATE', dataIndex: 'selflife', flex: 1, renderer: expstatus},
