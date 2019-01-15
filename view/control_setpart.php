@@ -4,7 +4,7 @@
 		return '<div style="white-space: pre;">'+val+'</div>';
 	}
 
-	var expstatus = function(val) {
+	function expstatus(val) {
 		// var len = val.substr(0,10);
 	  	// Harus di maintain karna status EXPIRED di hardcode
 	  	var today = new Date();
@@ -51,9 +51,18 @@
 		// }
 	}
 
+	function partstatus(val) {
+		if(val == 'E10') {
+			return ("<span style=color:red>EMPTY REEL</span>");
+		} else {
+			return (val);
+		}
+	}
+
+
 	Ext.define('open_part',{
 		extend: 'Ext.data.Model',
-		fields: ['unid','openid','partno','qty','proddate','selflife','opendate','floorlife','nik']
+		fields: ['unid','openid','partno','qty','proddate','selflife','opendate','floorlife','nik','place','accdate','datacode']
 	});
 
 	var open_part = Ext.create('Ext.data.Store',{
@@ -437,13 +446,16 @@
 	    	{ header: 'NO', xtype: 'rownumberer', width: 55, sortable: false },
 	    	{ text: 'UNIQUE ID', dataIndex: 'unid', hidden: true },
 	    	{ text: 'ID', dataIndex: 'openid', hidden: true },
-	    	{ text: 'PART NUMBER', dataIndex: 'partno', flex: 1, renderer: whitespace },
-	    	{ text: 'QTY', dataIndex: 'qty', flex: 1 },
+	    	{ text: 'PART NUMBER', dataIndex: 'partno', width: 200, renderer: whitespace },
+	    	{ text: 'QTY', dataIndex: 'qty', width: 80 },
 	    	{ text: 'PRODUCTION DATE', dataIndex: 'proddate', flex: 1 },
-	    	{ text: '(SELF LIFE)<br>EXPIRED DATE', dataIndex: 'selflife', flex: 1, renderer: expstatus},
+	    	{ text: '(SELF LIFE)<br>EXPIRED DATE', dataIndex: 'selflife', width: 200, renderer: expstatus},
 	    	{ text: 'OPEN DATE', dataIndex: 'opendate', flex: 1 },
-	    	{ text: '(FLOOR LIFE)<br>EXPIRED DATE', dataIndex: 'floorlife', flex: 1, renderer: expstatus },
-	    	{ text: 'NIK', dataIndex: 'nik', flex: 1 }
+	    	{ text: '(FLOOR LIFE)<br>EXPIRED DATE', dataIndex: 'floorlife', width: 200, renderer: expstatus },
+	    	{ text: 'NIK', dataIndex: 'nik', width: 80 },
+	    	{ text: 'PART STATUS', dataIndex: 'datacode', flex: 1, renderer: partstatus },
+	    	{ text: 'PLACE', dataIndex: 'place', flex: 1 },
+	    	{ text: 'ACC DATE', dataIndex: 'accdate', flex: 1 }
 	    ],
 	    bbar: {
 	    	xtype: 'pagingtoolbar',
