@@ -18,7 +18,7 @@
 	});
 
 	//note how we set the 'root' in the reader to match the data structure above
-	var issue_control = Ext.create('Ext.data.Store', {
+	var issue_store = Ext.create('Ext.data.Store', {
 	    model: 'issue_control',
 	    autoLoad: true,
 	    pageSize: 25,
@@ -111,7 +111,7 @@
 	                        	msg     : action.result.msg,
 	                        	buttons : Ext.Msg.OK
 	                        });
-	                        issue_control.loadPage(1);
+	                        issue_store.loadPage(1);
 	                     },
 	                    failure : function(form, action) {
 	                        Ext.Msg.show({
@@ -148,7 +148,7 @@
 									success: function(obj){
 										var resp = obj.responseText;
 										if(resp !=0) {
-											issue_control.loadPage(1);
+											issue_store.loadPage(1);
 										} else {
 											Ext.Msg.show({
 												title: 'Delete Data',
@@ -187,13 +187,14 @@
 					var a = ''; // empty string 
 					var b = ''; // empty string
 					var total = 0;
-					
+					// console.log();
+					// console.log(rec[0].data.id);
 					for (var i=0; i < len; i++) {
-						cb 	= a + '' + rec[i].data.id;
-						a 	= a + '' + rec[i].data.id + '/';
+						cb 	= a + '' + rec[i].data.issueid;
+						a 	= a + '' + rec[i].data.issueid + '/';
 						
-						lbl = b + '' + rec[i].data.id;
-						b 	= b + '' + rec[i].data.id + ', ';
+						lbl = b + '' + rec[i].data.issueid;
+						b 	= b + '' + rec[i].data.issueid + ', ';
 						
 						total++;
 					}
@@ -217,7 +218,7 @@
 	                        	msg     : action.result.msg,
 	                        	buttons : Ext.Msg.OK
 	                        });
-	                        issue_control.loadPage(1);
+	                        issue_store.loadPage(1);
 	      					// Ext.toast({
 							// 	html: '<h1>'+action.result.msg+'</h1>',
 							// 	title: 'SUCCESS',
@@ -391,7 +392,7 @@
 	});
 
 	var grid_issue = Ext.create('Ext.grid.Panel', {
-	    store: issue_control,
+	    store: issue_store,
 	    selModel: Ext.create('Ext.selection.CheckboxModel'),
 	    viewConfig: {
 	    	enableTextSelection  : true
@@ -441,7 +442,7 @@
 	    bbar: {
 	    	xtype: 'pagingtoolbar',
 	    	displayInfo	: true,
-	    	store: issue_control,
+	    	store: issue_store,
 	    	items: ['->',{
 	    		xtype: 'textfield',
 	    		name: 'issue_fldsrc',
@@ -450,8 +451,8 @@
 	    		listeners: {
 	    			specialkey: function(field, e) {
 					if (e.getKey() == e.ENTER) {
-						issue_control.proxy.setExtraParam('issue_fldsrc',field.getValue());
-						issue_control.loadPage(1);
+						issue_store.proxy.setExtraParam('issue_fldsrc',field.getValue());
+						issue_store.loadPage(1);
 						// console.log(field.value);
 					}
                 }
