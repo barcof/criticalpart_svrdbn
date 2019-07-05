@@ -59,7 +59,7 @@
       $error = $conn->ErrorMsg();
       $error_msg = str_replace(chr(50), "", $error);
 
-      echo "{'success': false,'msg':$error_msg}";
+      echo "{'success': false,'msg':'$error_msg'}";
     break;
 
     case 1:
