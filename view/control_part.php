@@ -1,5 +1,7 @@
 <div id="section">
 	<?php
+		session_start();
+		$session_value=(isset($_SESSION['username']))?$_SESSION['username']:'';
 		include_once 'control_baking.php';
 		include_once 'control_issue.php';
 		include_once 'control_drypart.php';
@@ -397,6 +399,20 @@
 		    dockedItems: [toolbar_exp]
 		});
 
+		// var form_login = Ext.create('Ext.form.Panel',{
+		// 	name: 'form_login',
+		// 	layout: 'anchor',
+		// 	width: 400,
+		// 	defaults: {
+		// 		anchor: '100%',
+		// 		labelWidth: 150
+		// 	},
+		// 	defaultType: 'textfield',
+		// 	// items: [{
+		// 	// 	fieldLabel: 
+		// 	// }]
+		// });
+
 		var grid_exp = Ext.create('Ext.grid.Panel', {
 		    store: exp_control,
 		    selModel: Ext.create('Ext.selection.CheckboxModel'),
@@ -526,6 +542,119 @@
 		    }]
 		});
 
+		var win_login = Ext.create('Ext.form.Panel',{
+			title: 'FORM LOGIN',
+			// hidden: true,
+			layout: {
+				type: 'vbox',
+			    pack: 'center',
+			    align: 'center'
+			},
+			items: [{
+				xtype: 'textfield',
+	            name: 'username',
+	            fieldLabel: 'User Name',
+	            allowBlank: false
+			},{
+				xtype: 'textfield',
+	            name: 'password',
+	            fieldLabel: 'Password',
+	            inputType: 'password',
+	            allowBlank: false
+			},{
+				xtype: 'button',
+                formBind: true,
+                disabled: true,
+                scale: 'medium',
+                text: 'LOGIN',
+                width: 280,
+                handler: function() {
+                    var form = this.up('form').getForm();
+					if (form.isValid()) {
+						form.submit({
+							url: 'login.php',
+							waitMsg: 'Check for authentication, Please wait..',
+							success: function(form, action) {
+								Ext.Msg.show({
+		                        	title   : 'SUCCESS',
+		                        	msg     : action.result.msg,
+		                        	buttons : Ext.Msg.OK
+		                        });
+		                        form.reset();
+		                        location.reload();
+		                        // Ext.getCmp('form-login').hide();
+		                        // Ext.getCmp('form-logout').show();
+		                        console.log(action.result);
+
+		                    },
+		                    failure : function(form, action) {
+		                        Ext.Msg.show({
+			                        title   : 'WARNING',
+			                        icons   : Ext.Msg.ERROR,
+			                        msg     : action.result.msg,
+			                        buttons : Ext.Msg.OK
+		                        });
+		                        console.log(action.result);
+		                    }
+						});
+					}
+				
+                }
+			}]
+
+		});
+
+		win_logout = Ext.create('Ext.form.Panel',{
+			title: 'FORM LOGOUT',
+			layout: {
+				type: 'vbox',
+			    pack: 'center',
+			    align: 'center'
+			},
+			items: [{
+				html: '<h1>SILAKAN KLIK TOMBOL DI BAWAH UNTUK LOGOUT</h1>'
+			},{
+				xtype: 'button',
+                // formBind: true,
+                // disabled: true,
+                scale: 'medium',
+                text: 'LOGOUT',
+                // width: 280,
+                handler: function() {
+                    var form = this.up('form').getForm();
+					if (form.isValid()) {
+						form.submit({
+							url: 'logout.php',
+							waitMsg: 'Check for authentication, Please wait..',
+							success: function(form, action) {
+								Ext.Msg.show({
+		                        	title   : 'SUCCESS',
+		                        	msg     : action.result.msg,
+		                        	buttons : Ext.Msg.OK
+		                        });
+		                        // form.reset();
+		                        location.reload();
+		                        // Ext.getCmp('form-login').hide();
+		                        // Ext.getCmp('form-logout').show();
+		                        // console.log(action.result);
+
+		                    },
+		                    failure : function(form, action) {
+		                        Ext.Msg.show({
+			                        title   : 'WARNING',
+			                        icons   : Ext.Msg.ERROR,
+			                        msg     : action.result.msg,
+			                        buttons : Ext.Msg.OK
+		                        });
+		                        // console.log(action.result);
+		                    }
+						});
+					}
+				
+                }
+			}]
+		});
+
 		var tab_exp = Ext.create('Ext.tab.Panel',{
 			activeTab: 1, // remove after finish develop
 			tabRotation: 0,
@@ -550,22 +679,29 @@
 		            title: 'CONTROL EXPIRED DATE',
 		            layout: 'fit',
 		            items: panel_exp
-		        },
-		        {
+		        },{
 		        	title: 'DRY PART CONTROL',
 		        	layout: 'fit',
 		        	items: tab_drypart
-		        },
-		        {
+		        },{
 		            title: 'BAKING CONTROL',
 		            layout: 'fit',
 		            items: panel_baking
-		        },
-		        {
+		        },{
 		        	title: 'ISSUE PART',
 		        	layout: 'fit',
 		        	items: panel_issue
-		        }
+		        },{
+		        	title: 'ADMINISTRATOR',
+		        	layout: 'fit',
+		        	items: [win_login,win_logout],
+		        	id: 'form-login',
+		        	listeners: {
+						activate: function() {
+							console.log('Activated');
+						}
+					}
+				}
 		    ]
 		});
 
@@ -593,7 +729,23 @@
 		        	color: '#ffffff'
 		        },
 		        items: tab_exp
-		    }]
+		    }],
+		    listeners: {
+		    	render: function() {
+		    		// console.log('berak');
+		    		var username = '<?php echo $session_value;?>';
+
+		    		if ( username == null || username == '') {
+						win_logout.hide();
+						Ext.getCmp('delete-master').setHidden(true);
+						console.log('logout');
+					} else {
+						win_login.hide();
+						Ext.getCmp('delete-master').setHidden(false);
+						console.log('login');
+					}
+		    	}
+		    }
 		});
 	})
 </script>
