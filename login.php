@@ -19,13 +19,13 @@ $jvc->Connect($dsn,'sa','JvcSql@123');
 	// Checking if username & password are available
 	// $sqlcheck = "select count(*) from tb_users where username='{$username}' and userpass='{$userpass}'";
 	// $check = $conn->Execute($sqlcheck);
-	$sqlcheck = $jvc->execute("select count(*) from useridms where user_name = '{$username}' and password = '{$userpass}'");
+	$sqlcheck = $jvc->execute("select count(*) from useridms where user_id = '{$username}' and password = '{$userpass}'");
 	$check = $sqlcheck->fields[0];
 	$sqlcheck->Close();
 	// return $check;
 
 	if ($check > 0) {
-		$getauth = "select user_name, password, userlevel from useridms where user_name='{$username}' and password='{$userpass}'";
+		$getauth = "select user_name, password, userlevel from useridms where user_id='{$username}' and password='{$userpass}'";
 		$rs = $jvc->Execute($getauth);
 		$name = $rs->fields[0];
 		$pass = $rs->fields[1];
