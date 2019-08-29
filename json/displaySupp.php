@@ -7,7 +7,7 @@
 	$user = 'sa';
 	$pass = 'password';
 	$dbase = 'EDI';
-	$server = "Driver={SQL Server};Server=SVRDBS;Database=$dbase;";
+	$server = "Driver={SQL Server};Server=SVRDBZ\JeinSql2017S;Database=$dbase;";
 
 	$dbs_con = ADONewConnection($dbasetype);
 	$dbs_con->Connect($server, $user, $pass);
