@@ -33,7 +33,15 @@
 	    },
 	    listeners: {
 	    	load: function(store) {
-	    		store.proxy.setExtraParam('issue_fldsrc','');
+	    		// store.proxy.setExtraParam('issue_fldsrc','');
+				var src_partno = Ext.ComponentQuery.query('textfield[name=src_partno]')[0].getRawValue();
+				var src_model = Ext.ComponentQuery.query('textfield[name=src_model]')[0].getValue();
+				var src_lotno = Ext.ComponentQuery.query('textfield[name=src_lotno]')[0].getValue();
+				var src_proddate = Ext.ComponentQuery.query('datefield[name=src_proddate]')[0].getRawValue();
+	    		store.proxy.setExtraParam('issue_fldsrc',src_partno);
+	    		store.proxy.setExtraParam('src_model',src_model);
+	    		store.proxy.setExtraParam('src_lotno',src_lotno);
+	    		store.proxy.setExtraParam('src_proddate',src_proddate);
 	    	}
 	    }
 	});
@@ -243,6 +251,26 @@
 			handler: function() {
 				this.up('form').getForm().reset();
 				Ext.ComponentQuery.query('textfield[name=issue_nik]')[0].setEditable(true);
+				Ext.ComponentQuery.query('textfield[name=src_partno]')[0].reset();
+				Ext.ComponentQuery.query('textfield[name=src_model]')[0].reset();
+				Ext.ComponentQuery.query('textfield[name=src_lotno]')[0].reset();
+				Ext.ComponentQuery.query('datefield[name=src_proddate]')[0].reset();
+				issue_store.proxy.setExtraParam('issue_fldsrc','');
+	    		issue_store.proxy.setExtraParam('src_model','');
+	    		issue_store.proxy.setExtraParam('src_lotno','');
+	    		issue_store.proxy.setExtraParam('src_proddate','');
+				issue_store.loadPage(1);
+			}
+		},{
+			name: 'download',
+			icon: 'resources/unduh.png',
+			handler: function() {
+				var src_partno = Ext.ComponentQuery.query('textfield[name=src_partno]')[0].getValue();
+				var src_model = Ext.ComponentQuery.query('textfield[name=src_model]')[0].getValue();
+				var src_lotno = Ext.ComponentQuery.query('textfield[name=src_lotno]')[0].getValue();
+				var src_proddate = Ext.ComponentQuery.query('datefield[name=src_proddate]')[0].getRawValue();
+				// console.log({"partno":src_partno},{"model":src_model},{"lotno":src_lotno},{"proddate":src_proddate});
+				window.open('response/downloadIssue.php?src_partno='+src_partno+'&src_model='+src_model+'&src_lotno='+src_lotno+'&src_proddate='+src_proddate, "_self");
 			}
 		}]
 	});
@@ -402,14 +430,81 @@
 	    	{ text: 'UNIQUE ID', dataIndex: 'unid', hidden: true },
 	    	{ text: 'ID', dataIndex: 'issueid', hidden: true },
 	    	{ text: 'EXP. ID', dataIndex: 'expid', hidden: true },
-	        { text: 'PART NUMBER', dataIndex: 'part_no', flex: 1 },
+	        { text: 'PART NUMBER', dataIndex: 'part_no', flex: 1, layout: {type:'hbox',align:'stretch',pack:'center'},
+				items: [{
+					xtype: 'textfield',
+					name: 'src_partno',
+					emptyText: 'Part Number...',
+					listeners: {
+	    				specialkey: function(field, e) {
+							if (e.getKey() == e.ENTER) {
+								issue_store.proxy.setExtraParam('issue_fldsrc',field.getValue());
+								issue_store.proxy.setExtraParam('src_model',Ext.ComponentQuery.query('textfield[name=src_model]')[0].getValue());
+								issue_store.proxy.setExtraParam('src_lotno',Ext.ComponentQuery.query('textfield[name=src_lotno]')[0].getValue());
+								issue_store.proxy.setExtraParam('src_proddate',Ext.ComponentQuery.query('datefield[name=src_proddate]')[0].getRawValue());
+								issue_store.loadPage(1);
+						// console.log(field.value);
+							}
+                		}
+	    			}
+				}]
+			},
 	        { text: 'PART NAME', dataIndex: 'part_name', flex: 1 },
-	        { text: 'MODEL', dataIndex: 'model', flex: 1 },
+	        { text: 'MODEL', dataIndex: 'model', flex: 1,layout: {type:'hbox',align:'stretch',pack:'center'},
+				items: [{
+					xtype: 'textfield',
+					name: 'src_model',
+					emptyText: 'Model...',
+					listeners: {
+	    				specialkey: function(field, e) {
+							if (e.getKey() == e.ENTER) {
+								issue_store.proxy.setExtraParam('src_model',field.getValue());
+								issue_store.proxy.setExtraParam('issue_fldsrc',Ext.ComponentQuery.query('textfield[name=src_partno]')[0].getValue());
+								issue_store.proxy.setExtraParam('src_lotno',Ext.ComponentQuery.query('textfield[name=src_lotno]')[0].getValue());
+								issue_store.proxy.setExtraParam('src_proddate',Ext.ComponentQuery.query('datefield[name=src_proddate]')[0].getRawValue());
+								issue_store.loadPage(1);
+							}
+                		}
+	    			}
+				}] 
+			},
 	        { text: 'QTY ISSUE', dataIndex: 'qty', flex: 1 },
 	        { text: 'LOT SIZE', dataIndex: 'lotsize',flex: 1 },
-	        { text: 'LOT NUMBER', dataIndex: 'lotno',flex: 1 },
+	        { text: 'LOT NUMBER', dataIndex: 'lotno',flex: 1, layout: {type:'hbox',align:'stretch',pack:'center'},
+				items: [{
+					xtype: 'textfield',
+					name: 'src_lotno',
+					emptyText: 'Lot Number...',
+					listeners: {
+	    				specialkey: function(field, e) {
+							if (e.getKey() == e.ENTER) {
+								issue_store.proxy.setExtraParam('src_lotno',field.getValue());
+								issue_store.proxy.setExtraParam('issue_fldsrc',Ext.ComponentQuery.query('textfield[name=src_partno]')[0].getValue());
+								issue_store.proxy.setExtraParam('src_model',Ext.ComponentQuery.query('textfield[name=src_model]')[0].getValue());
+								issue_store.proxy.setExtraParam('src_proddate',Ext.ComponentQuery.query('datefield[name=src_proddate]')[0].getRawValue());
+								issue_store.loadPage(1);
+							}
+                		}
+	    			}
+				}] },
 	        { text: 'OPEN DATE', dataIndex: 'opendate',flex: 1 },
-	        { text: 'PROD. DATE', dataIndex: 'prod_date',flex: 1 },
+	        { text: 'PROD. DATE', dataIndex: 'prod_date',flex: 1, layout: {type:'hbox',align:'stretch',pack:'center'},
+				items: [{
+					xtype: 'datefield',
+					name: 'src_proddate',
+					emptyText: 'Prod. Date...',
+					format: 'Y-m-d',
+					editable: false,
+					listeners: {
+	    				select: function(field) {
+							issue_store.proxy.setExtraParam('issue_fldsrc',Ext.ComponentQuery.query('textfield[name=src_partno]')[0].getValue());
+							issue_store.proxy.setExtraParam('src_model',Ext.ComponentQuery.query('textfield[name=src_model]')[0].getValue());
+							issue_store.proxy.setExtraParam('src_lotno',Ext.ComponentQuery.query('textfield[name=src_lotno]')[0].getValue());
+							issue_store.proxy.setExtraParam('src_proddate',field.getRawValue());
+							issue_store.loadPage(1);
+                		}
+	    			}
+				}] },
 	        { text: 'EXP. DATE', dataIndex: 'exp_date',flex: 1,
 	        	renderer: function(val) {
 		          	var today = new Date();
@@ -446,17 +541,16 @@
 	    	items: ['->',{
 	    		xtype: 'textfield',
 	    		name: 'issue_fldsrc',
-	    		width: 800,
+	    		width: 600,
 	    		emptyText: 'Search part number in here...',
-	    		listeners: {
-	    			specialkey: function(field, e) {
-					if (e.getKey() == e.ENTER) {
-						issue_store.proxy.setExtraParam('issue_fldsrc',field.getValue());
-						issue_store.loadPage(1);
-						// console.log(field.value);
-					}
-                }
-	    		}
+	    		// listeners: {
+	    		// 	specialkey: function(field, e) {
+				// 		if (e.getKey() == e.ENTER) {
+				// 			issue_store.proxy.setExtraParam('issue_fldsrc',field.getValue());
+				// 			issue_store.loadPage(1);
+				// 		}
+				// 	}
+	    		// }
 	    	}]
 	    },
 	    listeners: {
@@ -500,7 +594,7 @@
             }
 	    }
 	});
-
+	
 	var panel_issue = Ext.create('Ext.panel.Panel',{
 		border: true,
 		layout: 'border',

@@ -6,8 +6,11 @@
 	$start = ( $page * $limit ) + 1;
 
 	$partno = isset($_REQUEST['issue_fldsrc']) ? $_REQUEST['issue_fldsrc'] : "";
-
-	$sql = $conn->Execute("declare @totalcount as int exec displayIssueData $start, $limit, '{$partno}', @totalcount=@totalcount out");
+	$model = isset($_REQUEST['src_model']) ? $_REQUEST['src_model'] : "";
+	$lotno = isset($_REQUEST['src_lotno']) ? $_REQUEST['src_lotno'] : "";
+	$proddate = isset($_REQUEST['src_proddate']) ? $_REQUEST['src_proddate'] : "";
+// echo "declare @totalcount as int exec displayIssueData_test $start, $limit, '{$partno}', '{$model}', '{$lotno}', '{$proddate}', @totalcount=@totalcount out"; return;
+	$sql = $conn->Execute("declare @totalcount as int exec displayIssueData $start, $limit, '{$partno}', '{$model}', '{$lotno}', '{$proddate}', @totalcount=@totalcount out");
 
 	$totalcount = $sql->fields['14'];
 	$return = array();
